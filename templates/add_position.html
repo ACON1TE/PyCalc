@@ -1,0 +1,29 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<h1>{{mess}}</h1>
+<form name=“positions_form” method="post" action="/add_positions">
+    <p>Название должности</p>
+
+    <input name="position_name" type="text" required>
+    <p>Зарплата/оклад</p>
+    <input name="salary" type="number" step="0.0001" required>
+    <p>
+        Система поощерения
+    </p>
+    <select name="functions_id">
+
+        {%for tag in html%}
+        <option value="{{tag[0]}}" class="">{{tag[1]}}</option>
+        {%endfor%}
+    </select>
+
+    <button name="submit" type="submit">Войти</button>
+</form>
+{%endblock%}
+<!--
+position_id - целое число, уникальный, первичный ключ, не может быть пустым
+functions_id - целое число, внешний ключ на таблицу functions (поле->function_id) -> посылает на функцию разчета премии
+position_name - строка неограниченного размера, уникальный, не может быть пустым -> название должности
+salary - нецелое число -> зарплата (на нее не влияет коэфициенты)
+-->

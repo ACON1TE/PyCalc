@@ -1,0 +1,158 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<style>
+  table, th, td {
+    border: 1px solid;
+    text-align: center;
+  }
+</style>
+<h3>Раздел А: количественные (измеряемые) КПЭ:</h3>
+<table class="section_a_coefficients">
+    <thead>
+    <tr>
+        <th class="number">К-т</th>
+        <th class="goals">Цели</th>
+        <th class="weight">Вес %</th>
+        <th class="value-range">Диапазоны значений</th>
+        <th class="formula">Формула расчета коэффициентов<br>для соответствующего диапазона</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for target in section_a_targets %}
+    <tr>
+        <td class="coeff-value">a{{section_a_targets.index(target) + 1}}</td>
+        <td class="goals">{{target.title}}</td>
+        <td class="weight">{{target.weight}}%</td>
+        <td class="value-range">
+            <table>
+                <tr>
+                    <td>при уровне от {{target.range_min[0]}}% до {{target.range_max[0]}}% от плановой</td>
+                </tr>
+                <tr>
+                    <td>при уровне от {{target.range_min[1]}}% до {{target.range_max[1]}}% от плановой</td>
+                </tr>
+                <tr>
+                    <td>при уровне от {{target.range_min[2]}}% до {{target.range_max[2]}}% от плановой</td>
+                </tr>
+                <tr>
+                    <td>при уровне от {{target.range_min[3]}}% до {{target.range_max[3]}}% от плановой</td>
+                </tr>
+            </table>
+        </td>
+        <td class="formula">
+            <table>
+                <tr>
+                    <td>Вес * {{target.range_coef[0]}} / КПЭ</td>
+                </tr>
+                <tr>
+                    <td>Вес * {{target.range_coef[1]}} / КПЭ</td>
+                </tr>
+                <tr>
+                    <td>Вес * {{target.range_coef[2]}} / КПЭ</td>
+                </tr>
+                <tr>
+                    <td>Вес * {{target.range_coef[3]}} / КПЭ</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td>100%</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<h3>Раздел Б: качественные (оценочные) КПЭ:</h3>
+<table class="section_b_coefficients">
+    <thead>
+    <tr>
+        <th class="number">К-т</th>
+        <th class="goals">КПЭ</th>
+        <th class="value-range">Диапазон<br>значений</th>
+        <th class="weight">Bec %</th>
+        <th class="formula">Формула<br>расчета</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for target in section_b_targets %}
+    <tr>
+        <td class="number">б{{section_b_targets.index(target) + 1}}</td>
+        <td class="goals">{{target.title}}</td>
+        <td class="value-range">от {{target.range_min}} до {{target.range_max}} баллов</td>
+        <td class="weight">{{target.weight}}%</td>
+        <td class="formula">
+            <table>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>100%</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<h3>Раздел С: проектные задачи:</h3>
+<table class="section_c_coefficients">
+    <thead>
+    <tr>
+        <th class="number">К-т</th>
+        <th class="goals">Проект (КПЭ)</th>
+        <th class="value-range">Диапазон<br>значений</th>
+        <th class="weight">Bec %</th>
+        <th class="formula">Формула<br>расчета</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for target in section_c_targets %}
+    <tr>
+        <td class="number">с{{section_c_targets.index(target) + 1}}</td>
+        <td class="goals">{{target.title}}</td>
+        <td class="value-range">от {{target.range_min}} до {{target.range_max}} баллов</td>
+        <td class="weight">{{target.weight}}%</td>
+        <td class="formula">
+            <table>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+                <tr>
+                    <td>Вес * Значение КПЭ / {{target.range_coef}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>100%</td>
+    </tr>
+    </tbody>
+</table>
+{%endblock%}

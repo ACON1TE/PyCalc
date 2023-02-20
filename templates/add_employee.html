@@ -1,0 +1,32 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<h1>{{mes}}</h1>
+<form name = “employe_form” method="post" action="/add_employee">
+    <p>Имя</p>
+    <input name="name" type="text" required>
+    <p>email</p>
+    <input name="email" type="text" required>
+    <p>Номер телефона</p>
+    <input name="phone" type="text">
+    <p>Должность</p>
+    <select name="position_id">
+         {%for tag in html%}
+        <option value="{{tag[0]}}" class="">{{tag[1]}}</option>
+        {%endfor%}
+    </select>
+
+    <!-- прост для теста сессии -->
+    <p>Компания - {{company[0]}}</p>
+
+    <button name="submit" type="submit">Войти</button>
+</form>
+{%endblock%}
+<!--
+    name - строка неограниченного размера, не может быть пустым -> имя сотрудника
+    email - строка неограниченного размера -> электронная почта
+    phone - строка неограниченного размера -> номер телефона
+    position_id - целое число, внешний ключ на таблицу positions (поле->position_id) -> посылает на должность
+    function_id - целое число, внешний ключ на таблицу functions (поле->function_id) -> посылает на функцию разчета премии
+    company_id - целое число, внешний ключ на таблицу company (поле->company_id) -> посылает на компанию
+-->
