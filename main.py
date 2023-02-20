@@ -128,7 +128,6 @@ def get_data_position():
         data.append((iter + 1,value[2]))
     return data
 
-
 # страница введения данных для сотрудников
 @app.route('/get_employe', methods=['GET'])
 def get_employe():
@@ -144,7 +143,18 @@ def get_employe():
 >> titles, weights, ranges_min, ranges_max, coefs
 * ranges_min, ranges_max, coefs - двумерные списки 
 """
-
+@app.route('/section_abc', methods=['GET', 'POST'])
+def section_abc():
+    if 'company_id' in session:
+        if request.method == 'POST':
+            alert = "Запись добавлена!"
+            return render_template('section_abc.html', alert=alert)
+        else:
+            return render_template('section_abc.html')
+    else:
+        session['route'] = '/section_abc'
+        alert = 'Авторизуйся'
+        return render_template('none_index.html', alert=alert)
 
 @app.route('/section_a', methods=['GET', 'POST'])
 def section_a_input():
@@ -190,8 +200,6 @@ def section_a_input():
 1. перебирает все инпуты по всем разделам
 2. сохраняет все значения в 2 списка и 3 переменные
 """
-
-
 @app.route('/section_b', methods=['GET', 'POST'])
 def section_b_input():
     if request.method == 'POST':
@@ -226,8 +234,6 @@ def section_b_input():
 1. перебирает все инпуты по всем разделам
 2. сохраняет все значения в 2 списка и 3 переменные
 """
-
-
 @app.route('/section_c', methods=['GET', 'POST'])
 def section_c_input():
     if request.method == 'POST':
@@ -260,12 +266,6 @@ def view_coefficients():
     return render_template('view_coefficients.html', section_a_targets=get_coefficients_a(),
                            section_b_targets=get_coefficients_b(), section_c_targets=get_coefficients_c())
 
-
-
-# тут конец *********************
-
-
-
 # тест сессии
 # успешно
 @app.route('/test', methods=['GET'])
@@ -294,15 +294,14 @@ def test_check():
         return render_template('1_test_check.html')
     else:
         session['route'] = '/test_check'
-        alert = 'Авторизуйся сука!!!1111!!1!'
+        alert = 'Авторизуйся'
         return render_template('1_test_login.html', alert=alert)
 
-
-
 if __name__ == "__main__":
-
-    drop_all()
-    create_db()
-    fill_db(EMPLOYEE_NUM = 40)
+    #drop_all()
+    #create_db()
+    #fill_db(EMPLOYEE_NUM = 40)
+    #cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
+    #con.commit()
 
     app.run()

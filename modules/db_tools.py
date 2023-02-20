@@ -335,6 +335,11 @@ def fill_db(COMPANY_NUM = 7,
     # fill_reports_data(REPORTS_NUM)
     print("Таблицы заполнены данными")
 
+def insert_coefs_abc():
+    try:
+        return 1
+    except:
+        return 0
 
 # заполняет часть таблицы всеми значениями из раздела А
 def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: list, coefs: list) -> int:
