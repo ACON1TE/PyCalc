@@ -5,12 +5,12 @@
     <label>
         По какому отделу вы хотите посчитать премии:
     </label>
-    <select>
+    <select name="position_id">
         <!-- <option value="0">Все отделы</option> -->
         {%for tag in html%}
         <option value="{{tag[0]}}">{{tag[1]}}</option>
         {%endfor%}
     </select>
-    <button name="submit" type="submit">Добавить сотрудника</button>
+    <button name="submit" type="submit">Посчитать</button>
 </form>
 {%endblock%}

@@ -39,3 +39,12 @@ class TargetSecondType:
         self.range_min = range_min
         self.range_max = range_max
         self.range_coef = range_coef
+
+class report:
+    def __init__(self,amount_plan,completed_amount,completed_quality,completed_task,budget_plan,budget_spend):
+        self.amount_plan = amount_plan
+        self.completed_amount = completed_amount
+        self.completed_quality = completed_quality
+        self.completed_task = completed_task
+        self.budget_plan = budget_plan
+        self.budget_spend = budget_spend

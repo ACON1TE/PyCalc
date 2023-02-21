@@ -7,6 +7,7 @@ con -> менять под себя
 import psycopg2
 import random
 from modules.interfaces import *
+
 # подключение к БД
 con = psycopg2.connect(
     database="PyCalc",
@@ -17,6 +18,7 @@ con = psycopg2.connect(
 )
 print("БД подключена!")
 cur = con.cursor()
+
 
 # удаляет все таблицы
 def drop_all() -> None:
@@ -43,6 +45,7 @@ def drop_all() -> None:
             print("Таблица company удалена")
     else:
         print("Действие отменено")
+
 
 # создает все таблицы в БД
 def create_db() -> None:
@@ -168,6 +171,7 @@ def create_db() -> None:
     con.commit()
     print("Таблица 'employee' создана")
 
+
 def fill_company_data(companies_num: int) -> None:
     companies = []
     for i in range(companies_num):
@@ -179,6 +183,7 @@ def fill_company_data(companies_num: int) -> None:
         cur.execute(
             f"INSERT INTO company (name, login, password) VALUES ('{company[0]}', '{company[1]}', '{company[2]}')")
     con.commit()
+
 
 def fill_coefficients_data(count) -> None:
     for kek in range(count):
@@ -236,6 +241,7 @@ def fill_coefficients_data(count) -> None:
                     f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
         con.commit()
 
+
 def fill_functions_data(functions_num: int) -> None:
     cur.execute(f"SELECT coefficients_id FROM coefficients")
     coefficients_id_list = cur.fetchall()
@@ -244,6 +250,7 @@ def fill_functions_data(functions_num: int) -> None:
         coefficients_id = random.choice(coefficients_id_list)[0]
         cur.execute(f"INSERT INTO functions(coefficients_id, name) VALUES({coefficients_id}, '{name}')")
         con.commit()
+
 
 def fill_positions_data(positions_num: int) -> None:
     cur.execute(f"SELECT * FROM functions")
@@ -260,6 +267,7 @@ def fill_positions_data(positions_num: int) -> None:
         cur.execute(
             f"INSERT INTO positions (functions_id, position_name, salary, company_id) VALUES ({function_ids[random.randint(0, len(function_ids) - 1)][0]}, '{position_name}', '{salary}', {company_id})")
     con.commit()
+
 
 def fill_reports_data(reports_num: int) -> None:
     cur.execute(f"SELECT company_id FROM company")
@@ -283,6 +291,7 @@ def fill_reports_data(reports_num: int) -> None:
                     f"{completed_quality}, {tasks_plan}, {completed_tasks}, {budget_plan}, {budget_spend})")
         con.commit()
 
+
 def fill_employee_data(employees_num: int) -> None:
     cur.execute(f"SELECT position_id FROM positions")
     position_id_list = cur.fetchall()
@@ -303,6 +312,7 @@ def fill_employee_data(employees_num: int) -> None:
                     f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
         con.commit()
 
+
 # заполняет все таблицы рандомно сгенерированными значениями
 def fill_db(COMPANY_NUM=7,
             COEF_FUNC_COUNT=3,
@@ -316,6 +326,7 @@ def fill_db(COMPANY_NUM=7,
     fill_employee_data(EMPLOYEE_NUM)
     # fill_reports_data(REPORTS_NUM)
     print("Таблицы заполнены данными")
+
 
 # удаляет и создает таблицу company + добавляет в нее запись (1, 'тестовое имя', 'root', 'root')
 def test_table() -> None:
@@ -335,6 +346,7 @@ def test_table() -> None:
     con.commit()
     print("Тестовая запись добавлена")
 
+
 # заполняет часть таблицы всеми значениями из раздела А
 def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: list, coefs: list) -> int:
     test_only = [0.35, 0.35, 0.3]  # coefs_abc_weight
@@ -349,6 +361,7 @@ def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: li
     except:
         con.commit()
         return 0
+
 
 # заполняет часть таблицы всеми значениями из раздела Б и С
 def insert_coefs(section: str, titles: list, weights: list, range_min: int, range_max: int, coef: int) -> int:
@@ -376,6 +389,7 @@ def insert_coefs(section: str, titles: list, weights: list, range_min: int, rang
             return 0
     else:
         print("Wrong section letter!")
+
 
 # Возвращает список объектов раздела А из таблицы coefficients для вывода в таблицу
 def get_coefficients_a(coefficients_id: int) -> list:
@@ -456,7 +470,7 @@ def add_company(name: str, login: str, password: str) -> bool:
 
 
 # Добавляет одну запись в таблицу positions, возвращает: True - если прошло успешно, в противном случае - False
-def add_position(position_name: str, salary: float, function_id: int, company_id:int) -> bool:
+def add_position(position_name: str, salary: float, function_id: int, company_id: int) -> bool:
     try:
         cur.execute(
             f"insert into positions(functions_id, position_name, salary, company_id) values({function_id}, '{position_name}', {salary}, {company_id})")
@@ -487,11 +501,19 @@ def get_all_positions() -> list:
     con.commit()
     return res
 
+
 def get_positions(company_id) -> list:
-    cur.execute(f"select position_id,position_name from positions where company_id ={company_id}")
-    res = cur.fetchall()
-    con.commit()
-    return res
+    if company_id == 100:
+        cur.execute(f"select position_id,position_name from positions")
+        res = cur.fetchall()
+        con.commit()
+        return res
+    else:
+        cur.execute(f"select position_id,position_name from positions where company_id ={company_id}")
+        res = cur.fetchall()
+        con.commit()
+        return res
+
 
 # Возвращает список всех записей из таблицы functions
 def get_all_functions() -> list:
@@ -527,7 +549,8 @@ def get_company(login: str, password: str) -> list | bool:
     res = cur.fetchone()
     return res if res != None else False
 
-def coef_abc_add(coefs_abc_weight:list,
+
+def coef_abc_add(coefs_abc_weight: list,
                  coef_a_names,
                  coef_a_name_weight,
                  coef_a_bottom_all_values,
@@ -545,13 +568,13 @@ def coef_abc_add(coefs_abc_weight:list,
                  coef_c_weight):
     try:
         cur.execute(f"INSERT INTO coefficients(coefs_abc_weight, "
-                        f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
-                        f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
-                        f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
-                        f"VALUES(ARRAY{coefs_abc_weight},"
-                        f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
-                        f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
-                        f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
+                    f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
+                    f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
+                    f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
+                    f"VALUES(ARRAY{coefs_abc_weight},"
+                    f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
+                    f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
+                    f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
         con.commit()
         cur.execute("SELECT * FROM coefficients ORDER BY coefficients_id DESC LIMIT 1;")
         return cur.fetchone()
@@ -561,11 +584,13 @@ def coef_abc_add(coefs_abc_weight:list,
         print("stop")
         return False
 
+
 def get_coef_id(function_id):
     cur.execute(f"select coefficients_id from functions where function_id = {function_id}")
     res = cur.fetchone()[0]
     con.commit()
     return res
+
 
 def get_coef(function_id):
     cur.execute(f"select * from coefficients where coefficients_id={get_coef_id(function_id)}")
@@ -573,7 +598,8 @@ def get_coef(function_id):
     con.commit()
     return res
 
-def add_function_sql(coefficients_id,name):
+
+def add_function_sql(coefficients_id, name):
     try:
         cur.execute(f"INSERT INTO functions(coefficients_id, name) values({coefficients_id},'{name}')")
         con.commit()
@@ -582,10 +608,167 @@ def add_function_sql(coefficients_id,name):
         con.commit()
         return False
 
+
 def get_company_name(id: int) -> str:
     cur.execute(f'select name from company where company_id={id}')
     return cur.fetchone()[0]
 
-def create_me():
+# Создание суперюзера с id 100
+def create_superuser():
     cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
     con.commit()
+
+# Ручное заполнение таблиц coefficients, positions, employee
+def test_coeffs():
+    coefficients_id = 100
+    coefs_abc_weight = [0.3, 0.3, 0.4]
+    coef_a_names = ['Выполнение плана продаж', 'Выполнение плана по прибыли',
+                    'Контроль общехозяйственных и операционных расходов',
+                    'Оборачиваемость по дебиторской задолженности']
+    coef_a_name_weight = [25, 15, 30, 30]
+    coef_a_bottom_all_values = [[0, 0.25, 0.60, 0.75], [0, 0.33, 0.70, 0.9], [0, 0.4, 0.9, 1], [0, 0.5, 0.7, 1]]
+    coef_a_top_all_values = [[0.24, 0.59, 0.74, 1.2], [0.32, 0.69, 0.89, 1.1], [0.39, 0.89, 0.99, 1.5],
+                             [0.49, 0.69, 0.99, 1.2]]
+    coef_a_all_weights = [[0, 0.3, 0.55, 0.9], [0, 0.5, 0.75, 1], [0, 0.45, 0.6, 1.2], [0, 0.25, 0.8, 1.1]]
+    coef_b_names = ['Ведение достоверного и своевременного финансового учета и отчетности',
+                    'Планирование и организация работы', 'Быстрое обрабатывание заказов']
+    coef_b_name_weight = [30, 25, 45]
+    coef_b_bottom_value = 1
+    coef_b_top_value = 3
+    coef_b_weight = 3
+    coef_c_names = ['Запуск продаж икорной продукции', 'Запуск личного бренда одежды',
+                    'Запуск производства ядерки в Украине']
+    coef_c_name_weight = [25, 65, 10]
+    coef_c_bottom_value = 1
+    coef_c_top_value = 3
+    coef_c_weight = 3
+    cur.execute(f"INSERT INTO coefficients(coefficients_id, coefs_abc_weight, "
+                f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
+                f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
+                f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
+                f"VALUES({coefficients_id},ARRAY{coefs_abc_weight},"
+                f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
+                f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
+                f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
+    con.commit()
+
+def test_function():
+    function_id = 100
+    coefficients_id = 100
+    name = 'Кипсолид'
+    cur.execute(f"INSERT INTO functions(function_id, coefficients_id, name) VALUES({function_id},{coefficients_id}, '{name}')")
+    con.commit()
+
+def test_position():
+    position_id = 100
+    functions_id = 100
+    position_name = 'Управляющий отделом маркетинга'
+    salary = 1250.0
+    company_id = 100
+    cur.execute(
+        f"INSERT INTO positions (position_id, functions_id, position_name, salary, company_id) VALUES ({position_id},{functions_id}, '{position_name}', {salary}, {company_id})")
+    con.commit()
+
+
+def test_employee():
+    name = 'Степан Бандера'
+    email = 'bandera@gmail.com'
+    phone = '+380999999999'
+    position_id = 100
+    function_id = 100
+    cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
+                f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
+    con.commit()
+    name = 'Симон Петлюра'
+    email = 'petliura@gmail.com'
+    phone = '+3806777777777'
+    position_id = 100
+    function_id = 100
+    cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
+                f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
+    con.commit()
+
+
+def test_inserts():
+    create_superuser()
+    test_coeffs()
+    test_function()
+    test_position()
+    test_employee()
+
+def calculate_report(report: object, coefs: object) -> int:
+    budget_diff = report.budget_plan - report.budget_spend
+    if budget_diff < 0:
+        return f"Бюджет перерасходован. Премии невозможны. Сумма нестачи бюджета - {budget_diff}"
+    # количество бабла на каждый раздел
+    bonuses_sum_list = [budget_diff * coefs.coefs_abc_weight[0],
+                        budget_diff * coefs.coefs_abc_weight[1],
+                        budget_diff * coefs.coefs_abc_weight[2]]
+    print("Суммы равны - ", budget_diff == sum(bonuses_sum_list))
+    bonuses_a_sum_list = list()  # сумма начисленной премии на каждый подраздел A
+    weight_a_percentage = list() # на какой % был выполненен план подраздела А
+    print("Раздел А")
+    # раздел а
+    for index, line in enumerate(coefs.coef_a_names):
+        print(f"*****\n"
+              f"weight_a_percentage.append(report.completed_amount[index] / (report.amount_plan[index] / 100))\n"
+              f"{int(report.completed_amount[index]) / (int(report.amount_plan[index]) / 100)} % \n"
+              f"*****\n")
+        weight_a_percentage.append(int(report.completed_amount[index]) / (int(report.amount_plan[index]) / 100)) # на сколько % вып. план подраздела А
+
+        for index_weight,value in enumerate(coefs.coef_a_bottom_all_values[index]): # узнаем че там он получит за это
+            if weight_a_percentage[index] > coefs.coef_a_top_all_values[index][index_weight]: # проверяем не больше ли верхнего порога диапазона
+
+                if index_weight < len(coefs.coef_a_bottom_all_values[index]) - 1: # проверяем не вышли ли за пределы массива
+                    continue
+
+                else: # если % больше верхнего порога и у нас последний элемент массива
+                    """
+                        Вес подраздела * коэфициент диапазона / % выполненного плана
+                        Вес подраздела -> coefs.coef_a_name_weight[index] 
+                        коэфициент диапазона -> coef_a_all_weights[index][index_weight]
+                        % выполненного плана -> weight_percentage[index]
+                    """
+                    print(f"*****\n"
+                          f"качеля: {coefs.coef_a_bottom_all_values[index][index_weight]} < x < {coefs.coef_a_top_all_values[index][index_weight]}\n"
+                          f"index = {index} index_weight = {index_weight}\n"
+                          f"bonuses_a_sum_list.append((coefs.coef_a_name_weight[{index}] * coef_a_all_weights[{index}][{index_weight}]) / weight_a_percentage[{index}])\n"
+                          f"{(coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) / weight_a_percentage[index]}\n"
+                          f"*****\n")
+                    bonuses_a_sum_list.append((coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) / weight_a_percentage[index])
+            else:
+                print(f"*****\n"
+                      f"качеля: {coefs.coef_a_bottom_all_values[index][index_weight]} < x < {coefs.coef_a_top_all_values[index][index_weight]}\n"
+                      f"index = {index} index_weight = {index_weight}\n"
+                      f"bonuses_a_sum_list.append((coefs.coef_a_name_weight[{index}] * coef_a_all_weights[{index}][{index_weight}]) / weight_a_percentage[{index}])\n"
+                      f"{(coefs.coef_a_name_weight[index] * coef_a_all_weights[index][index_weight]) / weight_a_percentage[index]}\n"
+                      f"*****\n")
+                bonuses_a_sum_list.append((coefs.coef_a_name_weight[index] * coef_a_all_weights[index][index_weight]) / weight_a_percentage[index])
+    bonuses_b_sum_list = list()  # сумма начисленной премии на каждый подраздел B
+
+    print("Раздел Б")
+    # раздел б
+    for index, line in enumerate(coefs.coef_b_names):
+        # вес * КПЭ (оценка) / коэфициент
+        print(f"******\n"
+              f"coefs.coef_b_name_weight[index] * report.completed_quality[index] ) / coefs.coef_b_weight[index]\n"
+              f"coefs.coef_b_name_weight[{index}] * int(report.completed_quality[{index}]) ) / coefs.coef_b_weight\n"
+              f"{coefs.coef_b_name_weight[index]} * {int(report.completed_quality[index])} ) / {coefs.coef_b_weight} = {(coefs.coef_b_name_weight[index] * int(report.completed_quality[index]) ) / coefs.coef_b_weight}\n"
+              f"*****\n")
+        bonuses_b_sum_list.append(
+            ( coefs.coef_b_name_weight[index] * int(report.completed_quality[index]) ) / coefs.coef_b_weight
+        )
+    bonuses_c_sum_list = list()  # сумма начисленной премии на каждый подраздел C
+    # раздел с
+    print("Раздел С")
+    for index, line in enumerate(coefs.coef_c_names):
+        # вес * КПЭ (оценка) / коэфициент
+        print(f"******\n"
+              f"coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight\n"
+              f"coefs.coef_c_name_weight[{index}] * int(report.completed_task[{index}]) ) / coefs.coef_c_weight\n"
+              f"({coefs.coef_c_name_weight[index]} * {int(report.completed_task[index])} ) / {coefs.coef_c_weight} = {(coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight}\n"
+              f"*****\n")
+        bonuses_c_sum_list.append(
+            ( coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight
+        )
+    print("BREAKPOINT")   # </заебца>

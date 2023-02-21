@@ -1,0 +1,37 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<form name = “calculate_report_form” method="post" action="/calculate_report">
+    <label>Запланированный Бюджет</label>
+    <input type="number" step="1" name="budget_plan"><br>
+    <label>Потраченный бюджет</label>
+    <input type="number" step="1" name="budget_spend"><br><br>
+    <h1>
+        Введите запланированный и выполненный план по отделу '{{select}}'
+    </h1>
+    <h1>Раздел А - количественный</h1><br>
+    {%for tag in names_a%}
+    <label>Цель -> {{tag}}</label>
+    <label>Запланированно</label>
+    <input type="number" step="1" name="amount_plan">
+    <label>Выполненно</label>
+    <input type="number" step="1" name="completed_amount"><br><br>
+    {%endfor%}
+    <h1>Раздел Б - качественный</h1><br>
+    <label>Оценка выполненения (от {{bottom_b}} до {{top_b}})</label><br>
+    {%for tag in names_b%}
+    <label>Цель -> {{tag}}</label>
+    <label>Введите оценку:</label>
+    <input type="number" step="1" name="completed_quality"><br><br>
+    {%endfor%}
+    <h1>Раздел C - проектный</h1><br>
+    <label>Оценка выполненения (от {{c_bottom}} до {{c_top}})</label><br>
+    {%for tag in names_c%}
+    <label>Цель -> {{tag}}</label>
+    <label>Введите оценку:</label>
+    <input type="number" step="1" name="completed_task"><br><br>
+    {%endfor%}
+    <button name="submit" type="submit">Посчитать</button>
+</form>
+
+{%endblock%}

@@ -390,8 +390,9 @@ def add_function():
 def add_report():
     if 'company_id' in session:
         if request.method == 'POST':
-           pass
-
+            select = request.form.get("position_id")
+            session["position_id"] = select
+            return redirect('/calculate_report')
         else:
             html = get_positions(session['company_id'])
             if html:
@@ -403,11 +404,47 @@ def add_report():
         alert = 'Авторизуйся'
         return render_template('none_index.html', alert=alert)
 
+@app.route('/calculate_report', methods=['GET', 'POST'])
+def calculate_report_route():
+    if 'company_id' in session:
+        if request.method == 'POST':
+            amount_plan = request.form.getlist("amount_plan")
+            completed_amount = request.form.getlist("completed_amount")
+            completed_quality = request.form.getlist("completed_quality")
+            completed_task = request.form.getlist("completed_task")
+            budget_plan = int(request.form.get("budget_plan"))
+            budget_spend = int(request.form.get("budget_spend"))
+            data = report(amount_plan,completed_amount,completed_quality,completed_task,budget_plan,budget_spend)
+            report_id = calculate_report(data, coefs(get_coef(get_function_id_by_position_id(session["position_id"]))))
+            return render_template("none_index.html", report_id=report_id)
+        else:
+            res = coefs(get_coef(get_function_id_by_position_id(session["position_id"])))
+            print(res.coef_c_bottom_value)
+            print(res.coef_c_top_value)
+            return render_template("calculate_report.html",
+                                   names_a=res.coef_a_names,
+                                   names_b =res.coef_b_names,
+                                   names_c =res.coef_c_names,
+                                   bottom_b=res.coef_b_bottom_value,
+                                   top_b=res.coef_b_top_value,
+                                   c_bottom=res.coef_c_bottom_value,
+                                   c_top=res.coef_c_top_value)
+    else:
+        session['route'] = '/section_abc'
+        alert = 'Авторизуйся'
+        return render_template('none_index.html', alert=alert)
+
+
+
 if __name__ == "__main__":
     drop_all()
     create_db()
     fill_db()
-    create_me()
+    test_inserts()
+    #test_filling_for_coeffs()
     #res = coefs(get_coef(4))
     #print(res.coefficients_id)
+
+
+
     app.run()
