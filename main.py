@@ -1,7 +1,7 @@
 """
 скачать PostgreSQL - https://www.postgresql.org/download/windows/
 
-версия бека - 0.5
+версия бека - 0.6
 """
 
 from modules.db_tools import *
