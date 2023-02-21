@@ -1,0 +1,36 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<style>
+  table, th, td {
+    border: 1px solid;
+    text-align: center;
+  }
+
+</style>
+<h3>Вывод всех cотрудников:</h3>
+<table class="section_a_coefficients">
+    <thead>
+    <tr>
+        <th class="name">Имя сотрудника</th>
+        <th class="email">Эл. почта</th>
+        <th class="phone">Номер телефона</th>
+        <th class="post">Название должности</th>
+        <th class="function">Cистема поощерения</th>
+        <th class="company">Название компании</th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for employee in employees%}
+    <tr>
+        <td class="post_name">{{employee[0]}}</td>
+        <td class="post_email">{{employee[1]}}</td>
+        <td class="post_phone">{{employee[2]}}</td>
+        <td class="post_post">{{employee[3]}}</td>
+        <td class="post_function">{{employee[4]}}</td>
+        <td class="post_company">{{employee[5]}}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+{%endblock%}

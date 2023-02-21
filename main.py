@@ -7,16 +7,18 @@
 from modules.db_tools import *
 from werkzeug.utils import redirect
 from flask import Flask, request, session, render_template
-#app.secret_key = 'A78Zrejn359854tjnsT98j/3yX R~XHH!jmN]LWXT'
+
+# app.secret_key = 'A78Zrejn359854tjnsT98j/3yX R~XHH!jmN]LWXT'
 
 app = Flask(__name__)
-#app.secret_key = 'ахуенно секретный ключ'
-#app['SESSION_COOKIE_NAME'] = 'наша хуйня'
+# app.secret_key = 'ахуенно секретный ключ'
+# app['SESSION_COOKIE_NAME'] = 'наша хуйня'
 
 app.config.update(
-    #SECRET_KEY = 'ахуенно секретный ключ',
-    SECRET_KEY = 'cookies1',
+    # SECRET_KEY = 'ахуенно секретный ключ',
+    SECRET_KEY='cookies1',
 )
+
 
 # стартовая страница, открывает форму для ввода логина и пароля, не имеет меню
 @app.route('/')
@@ -29,8 +31,10 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def auth():
     if request.method == 'POST':
-        login,password = request.form['login'],request.form['password']
+        login, password = request.form['login'], request.form['password']
+        print(login, password)
         answer = get_company(login, password)
+        print(answer)
         if answer:
             session['company_id'] = answer[0]
             print(session)
@@ -44,6 +48,7 @@ def auth():
     else:
         message = "Введите логин и пароль"
         return render_template('none_index.html', mes=message)
+
 
 # калитка
 @app.route('/home', methods=['GET'])
@@ -76,9 +81,9 @@ def company_add():
 def positions_add():
     if request.method == 'POST':
         position_name = request.form['position_name']
-        salary = request.form['salary']
-        functions_id = request.form['functions_id']
-        if add_position(position_name, salary, functions_id):
+        salary = float(request.form['salary'])
+        function_id = int(request.form['functions_id'])
+        if add_position(position_name, salary, function_id):
             message = f"Должность '{position_name}' добавлена "
             return render_template('add_position.html', mess=message, html=get_data_function())
         else:
@@ -88,17 +93,13 @@ def positions_add():
 
         return render_template('add_position.html', html=get_data_function())
 
+
 def get_data_function():
     data = list()
-    sql = get_function()
+    sql = get_all_functions()
     for iter, value in enumerate(sql):
-        data.append((iter + 1,value[2]))
+        data.append((iter + 1, value[2]))
     return data
-
-# страница введения данных для должностей
-@app.route('/get_positions', methods=['GET'])
-def get_positions():
-    return render_template('get_positions.html')
 
 
 # страница введения данных для сотрудников
@@ -106,32 +107,36 @@ def get_positions():
 def employe_add():
     if 'company_id' in session:
         if request.method == 'POST':
-            message = "Сотрудник добавлен!"
-            return render_template('index.html', mess=message)
+            name = request.form['name']
+            email = request.form['email']
+            phone = request.form['phone']
+            position_id = int(request.form['position_id'])
+            function_id = get_function_id_by_position_id(position_id)
+            if add_employee(name, email, phone, position_id, function_id, session['company_id']):
+                message = f"Сотруник '{name}' успешно добавлен"
+                return render_template('add_employee.html', mes=message, html=get_data_position(),
+                                       company=get_company_name(session['company_id']))
+            else:
+                message = f"Ошибка! Сотруник '{name}' не был добавлен"
+                return render_template('add_employee.html', mes=message, html=get_data_position(),
+                                       company=get_company_name(session['company_id']))
+
         else:
-            position, company = str(), str()
-            sql = get_position()
-            print("sql_position >> ", sql)
-            for iter, value in enumerate(sql):
-                position += f'<option value="{iter}" class="">{value[2]}</option>'
             message = "Введите данные для нового сотрудника"
-            return render_template('add_employee.html', mes=message, html=get_data_position(), company=get_company_name(session['company_id']))
+            return render_template('add_employee.html', mes=message, html=get_data_position(),
+                                   company=get_company_name(session['company_id']))
     else:
         session['route'] = '/add_employee'
         message = "Войдите в свой аккаунт"
-        return render_template('none_index.html',mes=message)
+        return render_template('none_index.html', mes=message)
+
 
 def get_data_position():
     data = list()
-    sql = get_position()
+    sql = get_all_positions()
     for iter, value in enumerate(sql):
-        data.append((iter + 1,value[2]))
+        data.append((iter + 1, value[1]))
     return data
-
-# страница введения данных для сотрудников
-@app.route('/get_employe', methods=['GET'])
-def get_employe():
-    return render_template('all_employe.html')
 
 
 """
@@ -143,18 +148,7 @@ def get_employe():
 >> titles, weights, ranges_min, ranges_max, coefs
 * ranges_min, ranges_max, coefs - двумерные списки 
 """
-@app.route('/section_abc', methods=['GET', 'POST'])
-def section_abc():
-    if 'company_id' in session:
-        if request.method == 'POST':
-            alert = "Запись добавлена!"
-            return render_template('section_abc.html', alert=alert)
-        else:
-            return render_template('section_abc.html')
-    else:
-        session['route'] = '/section_abc'
-        alert = 'Авторизуйся'
-        return render_template('none_index.html', alert=alert)
+
 
 @app.route('/section_a', methods=['GET', 'POST'])
 def section_a_input():
@@ -200,6 +194,8 @@ def section_a_input():
 1. перебирает все инпуты по всем разделам
 2. сохраняет все значения в 2 списка и 3 переменные
 """
+
+
 @app.route('/section_b', methods=['GET', 'POST'])
 def section_b_input():
     if request.method == 'POST':
@@ -234,6 +230,8 @@ def section_b_input():
 1. перебирает все инпуты по всем разделам
 2. сохраняет все значения в 2 списка и 3 переменные
 """
+
+
 @app.route('/section_c', methods=['GET', 'POST'])
 def section_c_input():
     if request.method == 'POST':
@@ -263,8 +261,22 @@ def section_c_input():
 
 @app.route('/view_coefficients', methods=['GET'])
 def view_coefficients():
-    return render_template('view_coefficients.html', section_a_targets=get_coefficients_a(),
-                           section_b_targets=get_coefficients_b(), section_c_targets=get_coefficients_c())
+    return render_template('view_coefficients.html', section_a_targets=get_coefficients_a(1),
+                           section_b_targets=get_coefficients_b(1), section_c_targets=get_coefficients_c(1))
+
+
+@app.route('/view_positions', methods=['GET'])
+def view_positions():
+    return render_template('view_positions.html', positions=get_all_positions())
+
+
+@app.route('/view_employees', methods=['GET'])
+def view_employee():
+    return render_template('view_employees.html', employees=get_all_employees())
+
+
+# тут конец *********************
+
 
 # тест сессии
 # успешно
@@ -272,7 +284,8 @@ def view_coefficients():
 def test_func():
     return render_template('1_test.html')
 
-@app.route('/test_login', methods=['GET','POST'])
+
+@app.route('/test_login', methods=['GET', 'POST'])
 def test_login():
     if request.method == 'POST':
         res = test_auth(request.form['test_login'], request.form['test_password'])
@@ -288,20 +301,20 @@ def test_login():
     else:
         return render_template('1_test_login.html')
 
+
 @app.route('/test_check', methods=['GET'])
 def test_check():
     if 'auth' in session:
         return render_template('1_test_check.html')
     else:
         session['route'] = '/test_check'
-        alert = 'Авторизуйся'
+        alert = 'Авторизуйся сука!!!1111!!1!'
         return render_template('1_test_login.html', alert=alert)
 
+
 if __name__ == "__main__":
-    #drop_all()
-    #create_db()
-    #fill_db(EMPLOYEE_NUM = 40)
-    #cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
-    #con.commit()
+    drop_all()
+    create_db()
+    fill_db()
 
     app.run()
