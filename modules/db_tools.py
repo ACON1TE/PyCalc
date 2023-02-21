@@ -11,7 +11,7 @@ import random
 con = psycopg2.connect(
     database="PyCalc",
     user="postgres",
-    password="james132587",
+    password="postgres",
     host="127.0.0.1",
     port="5432"
 )
@@ -558,49 +558,6 @@ def get_company(login: str, password: str) -> list | bool:
     res = cur.fetchone()
     return res if res != None else False
 
-def coef_abc_add(coefs_abc_weight:list,
-                 coef_a_names,
-                 coef_a_name_weight,
-                 coef_a_bottom_all_values,
-                 coef_a_top_all_values,
-                 coef_a_all_weights,
-                 coef_b_names,
-                 coef_b_name_weight,
-                 coef_b_bottom_value,
-                 coef_b_top_value,
-                 coef_b_weight,
-                 coef_c_names,
-                 coef_c_name_weight,
-                 coef_c_bottom_value,
-                 coef_c_top_value,
-                 coef_c_weight):
-    try:
-        cur.execute(f"INSERT INTO coefficients(coefs_abc_weight, "
-                        f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
-                        f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
-                        f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
-                        f"VALUES(ARRAY{coefs_abc_weight},"
-                        f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
-                        f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
-                        f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
-        con.commit()
-        cur.execute("SELECT * FROM coefficients ORDER BY coefficients_id DESC LIMIT 1;")
-        return cur.fetchone()
-    except:
-        con.commit()
-        raise
-        print("stop")
-        return False
-
-
-def add_function_sql(coefficients_id,name):
-    try:
-        cur.execute(f"INSERT INTO functions(coefficients_id, name) values({coefficients_id},'{name}')")
-        con.commit()
-        return True
-    except:
-        con.commit()
-        return False
 
 # Тестовые методы для реализации session
 def create_test() -> None:

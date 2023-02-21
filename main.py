@@ -308,127 +308,13 @@ def test_check():
         return render_template('1_test_check.html')
     else:
         session['route'] = '/test_check'
-        alert = 'Авторизуйся'
+        alert = 'Авторизуйся сука!!!1111!!1!'
         return render_template('1_test_login.html', alert=alert)
 
 
-@app.route('/section_abc', methods=['GET', 'POST'])
-def section_abc():
-    if 'company_id' in session:
-        if request.method == 'POST':
-
-            #a
-            titles_a, weights_a, ranges_min_a, ranges_max_a, coefs_a = list(), list(), list(), list(), list()
-            coefs_abc_weight = [float(request.form.get(f"abc_weight1")),
-                                float(request.form.get(f"abc_weight2")),
-                                float(request.form.get(f"abc_weight3"))]
-            parse = True
-            iter_main, iter = 1, 1
-            while parse:
-                if request.form.get(f"title{iter_main}") is not None:
-                    titles_a.append(request.form.get(f"title{iter_main}"))
-                    weights_a.append(float(request.form.get(f"weight{iter_main}")))
-                    ranges_min_a.append(list())
-                    ranges_max_a.append(list())
-                    coefs_a.append(list())
-                    while True:
-                        if request.form.get(f"range_min{iter_main}_{iter}") is not None:
-                            ranges_min_a[iter_main - 1].append(float(request.form.get(f"range_min{iter_main}_{iter}")))
-                            ranges_max_a[iter_main - 1].append(float(request.form.get(f"range_max{iter_main}_{iter}")))
-                            coefs_a[iter_main - 1].append(float(request.form.get(f"coef{iter_main}_{iter}")))
-                            iter += 1
-                        else:
-                            iter = 1
-                            break
-                    iter_main += 1
-                else:
-                    parse = False
-                    break
-            #
-            #b
-            titles_b, weights_b = list(), list()
-            parse = True
-            line_num = 1
-            while parse:
-                if request.form.get(f"title{line_num}_b") is not None:
-                    titles_b.append(request.form.get(f"title{line_num}_b"))
-                    weights_b.append(float(request.form.get(f"weight{line_num}_b")))
-                    line_num += 1
-                else:
-                    parse = False
-                    break
-            range_min_b = int(request.form.get("range_min_b"))
-            range_max_b = int(request.form.get("range_max_b"))
-            coef_b = float(request.form.get("coef_b"))
-            #
-            #c
-            titles_c, weights_c = list(), list()
-            parsing = True
-            line_num = 1
-            while parsing:
-                if request.form.get(f"title{line_num}_c") is not None:
-                    titles_c.append(request.form.get(f"title{line_num}_c"))
-                    weights_c.append(float(request.form.get(f"weight{line_num}_c")))
-                    line_num += 1
-                else:
-                    parsing = False
-                    break
-            range_min_c = int(request.form.get("range_min_с"))
-            range_max_c = int(request.form.get("range_max_с"))
-            coef_c = float(request.form.get("coef_с"))
-            #c
-            result =  coef_abc_add(coefs_abc_weight,
-                                     titles_a,
-                                     weights_a,
-                                     ranges_min_a,
-                                     ranges_max_a,
-                                     coefs_a,
-                                     titles_b,
-                                     weights_b,
-                                     range_min_b,
-                                     range_max_b,
-                                     coef_b,
-                                     titles_c,
-                                     weights_c,
-                                     range_min_c,
-                                     range_max_c,
-                                     coef_c)
-            if result:
-                session['coefficient_id'] = result[0]
-                alert = "Запись добавлена! Укажите название функции"
-                return render_template('add_function.html', alert=alert)
-            else:
-                alert = "Ошибка"
-                return render_template('section_abc.html', alert=alert)
-        else:
-            return render_template('section_abc.html')
-    else:
-        session['route'] = '/section_abc'
-        alert = 'Авторизуйся'
-        return render_template('none_index.html', alert=alert)
-
-@app.route('/add_function', methods=['GET', 'POST'])
-def add_function():
-    if 'company_id' in session:
-        if request.method == 'POST':
-            if 'coefficient_id' in session:
-                res = add_function_sql(session['coefficient_id'],request.form.get("function_name"))
-                if res:
-                    del session['coefficient_id']
-                    alert = 'Функция добавлена !'
-                    return render_template('index.html', alert=alert)
-        else:
-            pass
-    else:
-        session['route'] = '/section_abc'
-        alert = 'Авторизуйся'
-        return render_template('none_index.html', alert=alert)
-
 if __name__ == "__main__":
-    #drop_all()
-    #create_db()
-    #fill_db()
-    #cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
-    #con.commit()
+    drop_all()
+    create_db()
+    fill_db()
 
     app.run()
