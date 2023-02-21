@@ -1,9 +1,9 @@
 """
 скачать PostgreSQL - https://www.postgresql.org/download/windows/
 
-версия бека - 0.5
+версия бека - 0.6
 """
-
+from modules.interfaces import *
 from modules.db_tools import *
 from werkzeug.utils import redirect
 from flask import Flask, request, session, render_template
@@ -83,7 +83,7 @@ def positions_add():
         position_name = request.form['position_name']
         salary = float(request.form['salary'])
         function_id = int(request.form['functions_id'])
-        if add_position(position_name, salary, function_id):
+        if add_position(position_name, salary, function_id, session['company_id']):
             message = f"Должность '{position_name}' добавлена "
             return render_template('add_position.html', mess=message, html=get_data_function())
         else:
@@ -112,7 +112,7 @@ def employe_add():
             phone = request.form['phone']
             position_id = int(request.form['position_id'])
             function_id = get_function_id_by_position_id(position_id)
-            if add_employee(name, email, phone, position_id, function_id, session['company_id']):
+            if add_employee(name, email, phone, position_id, function_id):
                 message = f"Сотруник '{name}' успешно добавлен"
                 return render_template('add_employee.html', mes=message, html=get_data_position(),
                                        company=get_company_name(session['company_id']))
@@ -274,44 +274,6 @@ def view_positions():
 def view_employee():
     return render_template('view_employees.html', employees=get_all_employees())
 
-
-# тут конец *********************
-
-
-# тест сессии
-# успешно
-@app.route('/test', methods=['GET'])
-def test_func():
-    return render_template('1_test.html')
-
-
-@app.route('/test_login', methods=['GET', 'POST'])
-def test_login():
-    if request.method == 'POST':
-        res = test_auth(request.form['test_login'], request.form['test_password'])
-        if res:
-            session['auth'] = res[1]
-            if 'route' in session:
-                return redirect(session['route'])
-            else:
-                return render_template('1_test.html')
-        else:
-            alert = 'Неправильный логин или пароль'
-            return render_template('1_test_login.html', alert=alert)
-    else:
-        return render_template('1_test_login.html')
-
-
-@app.route('/test_check', methods=['GET'])
-def test_check():
-    if 'auth' in session:
-        return render_template('1_test_check.html')
-    else:
-        session['route'] = '/test_check'
-        alert = 'Авторизуйся'
-        return render_template('1_test_login.html', alert=alert)
-
-
 @app.route('/section_abc', methods=['GET', 'POST'])
 def section_abc():
     if 'company_id' in session:
@@ -424,11 +386,28 @@ def add_function():
         alert = 'Авторизуйся'
         return render_template('none_index.html', alert=alert)
 
-if __name__ == "__main__":
-    #drop_all()
-    #create_db()
-    #fill_db()
-    #cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
-    #con.commit()
+@app.route('/add_report', methods=['GET', 'POST'])
+def add_report():
+    if 'company_id' in session:
+        if request.method == 'POST':
+           pass
 
+        else:
+            html = get_positions(session['company_id'])
+            if html:
+                return render_template('add_report.html', html=html)
+            else:
+                return render_template('add_report.html', html=[[999,'должности не созданы']])
+    else:
+        session['route'] = '/section_abc'
+        alert = 'Авторизуйся'
+        return render_template('none_index.html', alert=alert)
+
+if __name__ == "__main__":
+    drop_all()
+    create_db()
+    fill_db()
+    create_me()
+    #res = coefs(get_coef(4))
+    #print(res.coefficients_id)
     app.run()

@@ -6,7 +6,7 @@ con -> менять под себя
 
 import psycopg2
 import random
-
+from modules.interfaces import *
 # подключение к БД
 con = psycopg2.connect(
     database="PyCalc",
@@ -17,7 +17,6 @@ con = psycopg2.connect(
 )
 print("БД подключена!")
 cur = con.cursor()
-
 
 # удаляет все таблицы
 def drop_all() -> None:
@@ -44,7 +43,6 @@ def drop_all() -> None:
             print("Таблица company удалена")
     else:
         print("Действие отменено")
-
 
 # создает все таблицы в БД
 def create_db() -> None:
@@ -117,7 +115,8 @@ def create_db() -> None:
     cur.execute('''CREATE TABLE positions(position_id SERIAL PRIMARY KEY NOT NULL,
                                           functions_id INTEGER REFERENCES functions (function_id),
                                           position_name TEXT UNIQUE NOT NULL,
-                                          salary REAL);''')
+                                          salary REAL,
+                                          company_id INTEGER REFERENCES company (company_id));''')
     con.commit()
     print("Таблица 'positions' создана")
     """
@@ -165,11 +164,9 @@ def create_db() -> None:
                                           email TEXT,
                                           phone TEXT,
                                           position_id INTEGER REFERENCES positions (position_id),
-                                          function_id INTEGER REFERENCES functions (function_id),
-                                          company_id INTEGER REFERENCES company (company_id));''')
+                                          function_id INTEGER REFERENCES functions (function_id));''')
     con.commit()
     print("Таблица 'employee' создана")
-
 
 def fill_company_data(companies_num: int) -> None:
     companies = []
@@ -182,7 +179,6 @@ def fill_company_data(companies_num: int) -> None:
         cur.execute(
             f"INSERT INTO company (name, login, password) VALUES ('{company[0]}', '{company[1]}', '{company[2]}')")
     con.commit()
-
 
 def fill_coefficients_data(count) -> None:
     for kek in range(count):
@@ -240,7 +236,6 @@ def fill_coefficients_data(count) -> None:
                     f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
         con.commit()
 
-
 def fill_functions_data(functions_num: int) -> None:
     cur.execute(f"SELECT coefficients_id FROM coefficients")
     coefficients_id_list = cur.fetchall()
@@ -250,20 +245,21 @@ def fill_functions_data(functions_num: int) -> None:
         cur.execute(f"INSERT INTO functions(coefficients_id, name) VALUES({coefficients_id}, '{name}')")
         con.commit()
 
-
 def fill_positions_data(positions_num: int) -> None:
     cur.execute(f"SELECT * FROM functions")
     function_ids = cur.fetchall()
     position_names = ['Manager', 'Designer', 'Master', 'Developer', 'Worker', 'Logist', 'TEST1', 'TEST8', 'TEST9',
                       'TEST10', 'TEST11', 'TEST12', 'TEST13', 'TEST14', 'TEST15']
+    cur.execute(f"SELECT company_id FROM company")
+    company_id_list = cur.fetchall()
 
     for i in range(positions_num):
+        company_id = random.choice(company_id_list)[0]
         position_name = position_names[i]
         salary = round(random.uniform(12.31, 5023.425), 2)
         cur.execute(
-            f"INSERT INTO positions (functions_id, position_name, salary) VALUES ({function_ids[random.randint(0, len(function_ids) - 1)][0]}, '{position_name}', '{salary}')")
+            f"INSERT INTO positions (functions_id, position_name, salary, company_id) VALUES ({function_ids[random.randint(0, len(function_ids) - 1)][0]}, '{position_name}', '{salary}', {company_id})")
     con.commit()
-
 
 def fill_reports_data(reports_num: int) -> None:
     cur.execute(f"SELECT company_id FROM company")
@@ -287,30 +283,25 @@ def fill_reports_data(reports_num: int) -> None:
                     f"{completed_quality}, {tasks_plan}, {completed_tasks}, {budget_plan}, {budget_spend})")
         con.commit()
 
-
 def fill_employee_data(employees_num: int) -> None:
     cur.execute(f"SELECT position_id FROM positions")
     position_id_list = cur.fetchall()
     cur.execute(f"SELECT function_id FROM functions")
     function_id_list = cur.fetchall()
-    cur.execute(f"SELECT company_id FROM company")
-    company_id_list = cur.fetchall()
     name_list = ['Yan', 'Novak', 'Anna', 'Maria', 'Sophia', 'Katherine', 'Eva', 'Diana', 'Nika', 'Yato', 'Denis',
                  'Nixat',
                  'Sasa', 'Kosta', 'Sevcov', 'Mazelov', 'Xesus']
     for i in range(employees_num):
         position_id = random.choice(position_id_list)[0]
         function_id = random.choice(function_id_list)[0]
-        company_id = random.choice(company_id_list)[0]
         name = random.choice(name_list)[0]
         email = random.choice(name)[0] + '@gmail.com'
         phone = random.randint(103163296, 134215783)
         phone = "+380" + str(phone)
         # profile_image_url = 'https://093241'
-        cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id, company_id) VALUES "
-                    f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}', {company_id})")
+        cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
+                    f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
         con.commit()
-
 
 # заполняет все таблицы рандомно сгенерированными значениями
 def fill_db(COMPANY_NUM=7,
@@ -325,7 +316,6 @@ def fill_db(COMPANY_NUM=7,
     fill_employee_data(EMPLOYEE_NUM)
     # fill_reports_data(REPORTS_NUM)
     print("Таблицы заполнены данными")
-
 
 # удаляет и создает таблицу company + добавляет в нее запись (1, 'тестовое имя', 'root', 'root')
 def test_table() -> None:
@@ -345,7 +335,6 @@ def test_table() -> None:
     con.commit()
     print("Тестовая запись добавлена")
 
-
 # заполняет часть таблицы всеми значениями из раздела А
 def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: list, coefs: list) -> int:
     test_only = [0.35, 0.35, 0.3]  # coefs_abc_weight
@@ -360,7 +349,6 @@ def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: li
     except:
         con.commit()
         return 0
-
 
 # заполняет часть таблицы всеми значениями из раздела Б и С
 def insert_coefs(section: str, titles: list, weights: list, range_min: int, range_max: int, coef: int) -> int:
@@ -388,30 +376,6 @@ def insert_coefs(section: str, titles: list, weights: list, range_min: int, rang
             return 0
     else:
         print("Wrong section letter!")
-
-
-# Дата-класс для записей в разделе A
-class TargetFirstType:
-    def __init__(self, title: str, weight: float, range_min: list, range_max: list, range_coef: list):
-        self.title = title
-        self.weight = weight
-        self.range_min = list()
-        self.range_max = list()
-        for i in range(len(range_min)):
-            self.range_min.append(int(range_min[i] * 100))
-            self.range_max.append(int(range_max[i] * 100))
-        self.range_coef = range_coef
-
-
-# Дата-класс для записей в разделе Б и С
-class TargetSecondType:
-    def __init__(self, title: str, weight: float, range_min: int, range_max: int, range_coef: int):
-        self.title = title
-        self.weight = weight
-        self.range_min = range_min
-        self.range_max = range_max
-        self.range_coef = range_coef
-
 
 # Возвращает список объектов раздела А из таблицы coefficients для вывода в таблицу
 def get_coefficients_a(coefficients_id: int) -> list:
@@ -492,10 +456,10 @@ def add_company(name: str, login: str, password: str) -> bool:
 
 
 # Добавляет одну запись в таблицу positions, возвращает: True - если прошло успешно, в противном случае - False
-def add_position(position_name: str, salary: float, function_id: int) -> bool:
+def add_position(position_name: str, salary: float, function_id: int, company_id:int) -> bool:
     try:
         cur.execute(
-            f"insert into positions(functions_id, position_name, salary) values({function_id}, '{position_name}', {salary} )")
+            f"insert into positions(functions_id, position_name, salary, company_id) values({function_id}, '{position_name}', {salary}, {company_id})")
         con.commit()
         return True
     except:
@@ -504,10 +468,10 @@ def add_position(position_name: str, salary: float, function_id: int) -> bool:
 
 
 # Добавляет одну запись в таблицу employee, возвращает: True - если прошло успешно, в противном случае - False
-def add_employee(name: str, email: str, phone: str, position_id: int, function_id: int, company_id: int) -> bool:
+def add_employee(name: str, email: str, phone: str, position_id: int, function_id: int) -> bool:
     try:
         cur.execute(
-            f"insert into employee(name, email, phone, position_id, function_id, company_id) values('{name}','{email}','{phone}',{position_id},{function_id},{company_id})")
+            f"insert into employee(name, email, phone, position_id, function_id) values('{name}','{email}','{phone}',{position_id},{function_id})")
         con.commit()
         return True
     except:
@@ -523,6 +487,11 @@ def get_all_positions() -> list:
     con.commit()
     return res
 
+def get_positions(company_id) -> list:
+    cur.execute(f"select position_id,position_name from positions where company_id ={company_id}")
+    res = cur.fetchall()
+    con.commit()
+    return res
 
 # Возвращает список всех записей из таблицы functions
 def get_all_functions() -> list:
@@ -592,6 +561,17 @@ def coef_abc_add(coefs_abc_weight:list,
         print("stop")
         return False
 
+def get_coef_id(function_id):
+    cur.execute(f"select coefficients_id from functions where function_id = {function_id}")
+    res = cur.fetchone()[0]
+    con.commit()
+    return res
+
+def get_coef(function_id):
+    cur.execute(f"select * from coefficients where coefficients_id={get_coef_id(function_id)}")
+    res = cur.fetchone()
+    con.commit()
+    return res
 
 def add_function_sql(coefficients_id,name):
     try:
@@ -602,23 +582,10 @@ def add_function_sql(coefficients_id,name):
         con.commit()
         return False
 
-# Тестовые методы для реализации session
-def create_test() -> None:
-    cur.execute('''CREATE TABLE test(id SERIAL PRIMARY KEY NOT NULL,
-                                          login TEXT NOT NULL,
-                                          password TEXT);''')
-    con.commit()
-
-
-def test_auth(login: str, password: str) -> list | bool:
-    cur.execute(f"select * from test where login='{login}' and password='{password}'")
-    res = cur.fetchone()
-    if res != None:
-        return res
-    else:
-        return False
-
-
 def get_company_name(id: int) -> str:
     cur.execute(f'select name from company where company_id={id}')
     return cur.fetchone()[0]
+
+def create_me():
+    cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
+    con.commit()

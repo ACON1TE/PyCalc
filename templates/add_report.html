@@ -1,0 +1,16 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<form name = “report_form” method="post" action="/add_report">
+    <label>
+        По какому отделу вы хотите посчитать премии:
+    </label>
+    <select>
+        <!-- <option value="0">Все отделы</option> -->
+        {%for tag in html%}
+        <option value="{{tag[0]}}">{{tag[1]}}</option>
+        {%endfor%}
+    </select>
+    <button name="submit" type="submit">Добавить сотрудника</button>
+</form>
+{%endblock%}
