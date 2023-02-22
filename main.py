@@ -58,7 +58,6 @@ def company_add():
         login = request.form['login']
         password = request.form['password']
         answer = add_company(name, login, password)
-        #
         result = get_company(login, password)
         session['company_id'] = get_company(login, password)[0]
         return render_template('index.html', company_name=get_company_name_by_id(session['company_id']))
@@ -331,9 +330,9 @@ def section_abc():
                 else:
                     parsing = False
                     break
-            range_min_c = int(request.form.get("range_min_с"))
-            range_max_c = int(request.form.get("range_max_с"))
-            coef_c = float(request.form.get("coef_с"))
+            range_min_c = int(request.form.get("range_min_c"))
+            range_max_c = int(request.form.get("range_max_c"))
+            coef_c = float(request.form.get("coef_c"))
             # c
             result = coef_abc_add(coefs_abc_weight,
                                   titles_a,
@@ -371,13 +370,13 @@ def add_function():
     if 'company_id' in session:
         if request.method == 'POST':
             if 'coefficient_id' in session:
-                res = add_function_sql(session['coefficient_id'], request.form.get("function_name"))
+                res = add_function_sql(session['coefficient_id'],request.form.get("function_name"))
                 if res:
                     del session['coefficient_id']
                     alert = 'Функция добавлена !'
-                    return render_template('index.html', alert=alert)
-        else:
-            pass
+                    return render_template('index.html', alert=alert, company_name=get_company_name_by_id(session['company_id']))
+            else:
+                return render_template('index.html')
     else:
         session['route'] = '/section_abc'
         alert = 'Авторизуйся'
@@ -423,25 +422,30 @@ def calculate_report_route():
                                          coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
                                          session['company_id'],
                                          session['position_id'])
-            session['report_id'] = report_id
-            return redirect('/show_report')
-            # return render_template("show_report.html", report_id=report_id)
+            if type(report_id) == str:
+                session['alert'] = report_id
+                return redirect('/show_report')
+            else:
+                session['report_id'] = report_id
+                return redirect('/show_report')
+            #return render_template("show_report.html", report_id=report_id)
         else:
             res = coefs(get_coef(get_function_id_by_position_id(session["position_id"])))
             print(res.coef_c_bottom_value)
             print(res.coef_c_top_value)
             return render_template("calculate_report.html",
                                    names_a=res.coef_a_names,
-                                   names_b=res.coef_b_names,
-                                   names_c=res.coef_c_names,
+                                   names_b =res.coef_b_names,
+                                   names_c =res.coef_c_names,
                                    bottom_b=res.coef_b_bottom_value,
                                    top_b=res.coef_b_top_value,
                                    c_bottom=res.coef_c_bottom_value,
                                    c_top=res.coef_c_top_value)
     else:
-        session['route'] = '/calculate_report'
+        session['route'] = '/section_abc'
         alert = 'Авторизуйся'
         return render_template('none_index.html', alert=alert)
+
 
 
 @app.route('/show_report', methods=['GET'])
@@ -458,10 +462,15 @@ def show_report():
                                    position_name=position_name,
                                    data=data)
         else:
-            message = "Выбранный отчет не найден"
-            return render_template('index.html', mes=message)
+            if 'alert' in session:
+                message = session['alert']
+                del session['alert']
+                return render_template('show_bad_report.html', mes = message)
+            else:
+                message = "Выбранный отчет не найден"
+                return render_template('show_bad_report.html', mes = message)
     else:
-        session['route'] = '/show_report'
+        session['route'] = '/section_abc'
         alert = 'Авторизуйся'
         return render_template('none_index.html', alert=alert)
 

@@ -1,0 +1,10 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<h1>{{alert}}</h1>
+<form name = “function_form” method="post" action="/add_function">
+        <p>Укажите название системы поощерения</p>
+        <input type="text" name="function_name">
+        <button name="submit" type="submit">сохранить</button>
+</form>
+{%endblock%}

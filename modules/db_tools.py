@@ -19,7 +19,7 @@ con = psycopg2.connect(
 print("БД подключена!")
 cur = con.cursor()
 
-SUPERUSER_ID = 100
+SUPERUSER_ID: int = 100
 
 
 # удаляет все таблицы
@@ -477,6 +477,7 @@ def add_employee(name: str, email: str, phone: str, position_id: int, function_i
 
 # Возвращает список всех записей из таблицы positions
 def get_all_positions(company_id: int) -> list:
+    global SUPERUSER_ID
     if company_id == SUPERUSER_ID:
         cur.execute(
             "select positions.position_id, functions.name, positions.position_name, positions.salary from positions "
@@ -500,6 +501,7 @@ def get_all_functions() -> list:
 
 # Возвращает список всех записей из таблицы employee
 def get_all_employees(company_id: int) -> list:
+    global SUPERUSER_ID
     if company_id == SUPERUSER_ID:
         cur.execute(
             'SELECT employee.name, employee.email, employee.phone, positions.position_name, functions.name from '
@@ -595,13 +597,16 @@ def get_company_name_by_id(id: int) -> str:
 
 # Создание суперюзера с id 100
 def create_superuser():
-    cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
+    global SUPERUSER_ID
+    company_id = SUPERUSER_ID
+    cur.execute(f"insert into company(company_id,name,login,password) values({company_id},'ASH inc.', 'root','root')")
     con.commit()
 
 
 # Ручное заполнение таблиц coefficients, positions, employee
 def test_coeffs():
-    coefficients_id = 100
+    global SUPERUSER_ID
+    coefficients_id = SUPERUSER_ID
     coefs_abc_weight = [0.3, 0.3, 0.4]
     coef_a_names = ['Выполнение плана продаж', 'Выполнение плана по прибыли',
                     'Контроль общехозяйственных и операционных расходов',
@@ -635,8 +640,9 @@ def test_coeffs():
 
 
 def test_function():
-    function_id = 100
-    coefficients_id = 100
+    global SUPERUSER_ID
+    function_id = SUPERUSER_ID
+    coefficients_id = SUPERUSER_ID
     name = 'Кипсолид'
     cur.execute(
         f"INSERT INTO functions(function_id, coefficients_id, name) VALUES({function_id},{coefficients_id}, '{name}')")
@@ -644,30 +650,32 @@ def test_function():
 
 
 def test_position():
-    position_id = 100
-    functions_id = 100
+    global SUPERUSER_ID
+    position_id = SUPERUSER_ID
+    functions_id = SUPERUSER_ID
     position_name = 'Управляющий отделом маркетинга'
     salary = 1250.0
-    company_id = 100
+    company_id = SUPERUSER_ID
     cur.execute(
         f"INSERT INTO positions (position_id, functions_id, position_name, salary, company_id) VALUES ({position_id},{functions_id}, '{position_name}', {salary}, {company_id})")
     con.commit()
 
 
 def test_employee():
+    global SUPERUSER_ID
     name = 'Степан Бандера'
     email = 'bandera@gmail.com'
     phone = '+380999999999'
-    position_id = 100
-    function_id = 100
+    position_id = SUPERUSER_ID
+    function_id = SUPERUSER_ID
     cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
                 f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
     con.commit()
     name = 'Симон Петлюра'
     email = 'petliura@gmail.com'
     phone = '+3806777777777'
-    position_id = 100
-    function_id = 100
+    position_id = SUPERUSER_ID
+    function_id = SUPERUSER_ID
     cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
                 f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
     con.commit()
@@ -696,7 +704,7 @@ def calculate_report(report: object, coefs: object, position_id: int, company_id
     # раздел а
     for index, line in enumerate(coefs.coef_a_names):
         weight_a_percentage.append(int(report.completed_amount[index]) / (
-                    int(report.amount_plan[index]) / 100))  # на сколько % вып. план подраздела А
+                int(report.amount_plan[index]) / 100))  # на сколько % вып. план подраздела А
         for index_weight, value in enumerate(coefs.coef_a_bottom_all_values[index]):  # узнаем че там он получит за это
             if weight_a_percentage[index] / 100 > coefs.coef_a_top_all_values[index][
                 index_weight]:  # проверяем не больше ли верхнего порога диапазона
