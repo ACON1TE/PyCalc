@@ -683,10 +683,10 @@ def test_employee():
 
 def test_inserts():
     create_superuser()
-    test_coeffs()
-    test_function()
-    test_position()
-    test_employee()
+    # test_coeffs()
+    # test_function()
+    # test_position()
+    # test_employee()
 
 
 def calculate_report(report: object, coefs: object, position_id: int, company_id: int) -> object | str:

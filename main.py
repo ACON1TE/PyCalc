@@ -420,8 +420,8 @@ def calculate_report_route():
                           budget_spend)
             report_id = calculate_report(data,
                                          coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
-                                         session['company_id'],
-                                         session['position_id'])
+                                         session['position_id'],
+                                         session['company_id'])
             if type(report_id) == str:
                 session['alert'] = report_id
                 return redirect('/show_report')
@@ -458,7 +458,7 @@ def show_report():
             position_name = get_position_name(data.position_id)
 
             return render_template('show_report.html',
-                                   company_name=position_name,
+                                   company_name=company_name,
                                    position_name=position_name,
                                    data=data)
         else:
