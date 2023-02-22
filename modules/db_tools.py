@@ -12,12 +12,14 @@ from modules.interfaces import *
 con = psycopg2.connect(
     database="PyCalc",
     user="postgres",
-    password="james132587",
+    password="postgres",
     host="127.0.0.1",
     port="5432"
 )
 print("БД подключена!")
 cur = con.cursor()
+
+SUPERUSER_ID = 100
 
 
 # удаляет все таблицы
@@ -137,16 +139,18 @@ def create_db() -> None:
     budget_spend нецелое число -> потраченый бюджет
     """
     cur.execute('''CREATE TABLE reports(orders_id SERIAL PRIMARY KEY NOT NULL,
-                                        company_id INTEGER REFERENCES company (company_id),
-                                        position_id INTEGER REFERENCES positions (position_id),
-                                        amount_plan INTEGER,
-                                        completed_amount INTEGER,
-                                        quality_plan INTEGER,
-                                        completed_quality INTEGER,
-                                        tasks_plan INTEGER,
-                                        completed_tasks INTEGER,
-                                        budget_plan REAL,
-                                        budget_spend REAL);''')
+                                            company_id INTEGER REFERENCES company (company_id),
+                                            position_id INTEGER REFERENCES positions (position_id),
+                                            amount_plan TEXT,
+                                            completed_amount TEXT,
+                                            completed_quality TEXT,
+                                            completed_tasks TEXT,
+                                            budget_plan REAL,
+                                            budget_spend REAL,
+                                            bonuses_abc_sum_list REAL[],
+                                            bonuses_a_coef_list REAL[],
+                                            bonuses_b_coef_list REAL[],
+                                            bonuses_c_coef_list REAL[]);''')
     con.commit()
     print("Таблица 'reports' создана")
     """
@@ -255,8 +259,9 @@ def fill_functions_data(functions_num: int) -> None:
 def fill_positions_data(positions_num: int) -> None:
     cur.execute(f"SELECT * FROM functions")
     function_ids = cur.fetchall()
-    position_names = ['Manager', 'Designer', 'Master', 'Developer', 'Worker', 'Logist', 'TEST1', 'TEST8', 'TEST9',
-                      'TEST10', 'TEST11', 'TEST12', 'TEST13', 'TEST14', 'TEST15']
+    position_names = ['Manager', 'Designer', 'Master', 'Back-end Developer', 'Worker', 'Logist', 'Front-end Developer',
+                      'Cleaning', 'Art-Director',
+                      'Accountant', 'Driver', 'Waiter', 'Bartender', 'Courier', 'Dispatcher']
     cur.execute(f"SELECT company_id FROM company")
     company_id_list = cur.fetchall()
 
@@ -267,29 +272,6 @@ def fill_positions_data(positions_num: int) -> None:
         cur.execute(
             f"INSERT INTO positions (functions_id, position_name, salary, company_id) VALUES ({function_ids[random.randint(0, len(function_ids) - 1)][0]}, '{position_name}', '{salary}', {company_id})")
     con.commit()
-
-
-def fill_reports_data(reports_num: int) -> None:
-    cur.execute(f"SELECT company_id FROM company")
-    company_id_list = cur.fetchall()
-    cur.execute(f"SELECT position_id FROM positions")
-    position_id_list = cur.fetchall()
-    for i in range(reports_num):
-        company_id = random.choice(company_id_list)[0]
-        position_id = random.choice(position_id_list)[0]
-        amount_plan = random.randint(0, 100)
-        completed_amount = random.randint(0, 100)
-        quality_plan = random.randint(0, 100)
-        completed_quality = random.randint(0, 100)
-        tasks_plan = random.randint(0, 100)
-        completed_tasks = random.randint(0, 100)
-        budget_plan = round(random.uniform(99.99, 50000.99), 2)
-        budget_spend = round(random.uniform(99.99, 50000.99), 2)
-        cur.execute(f"INSERT INTO reports (company_id, position_id, amount_plan, completed_amount, quality_plan,"
-                    f"completed_quality, tasks_plan, completed_tasks, budget_plan, budget_spend)"
-                    f"VALUES ({company_id}, {position_id}, {amount_plan}, {completed_amount}, {quality_plan}, "
-                    f"{completed_quality}, {tasks_plan}, {completed_tasks}, {budget_plan}, {budget_spend})")
-        con.commit()
 
 
 def fill_employee_data(employees_num: int) -> None:
@@ -317,14 +299,13 @@ def fill_employee_data(employees_num: int) -> None:
 def fill_db(COMPANY_NUM=7,
             COEF_FUNC_COUNT=3,
             POSITIONS_NUM=15,
-            REPORTS_NUM=201,
             EMPLOYEE_NUM=51) -> None:
     fill_company_data(COMPANY_NUM)
     fill_coefficients_data(COEF_FUNC_COUNT)
     fill_functions_data(COEF_FUNC_COUNT)
     fill_positions_data(POSITIONS_NUM)
     fill_employee_data(EMPLOYEE_NUM)
-    # fill_reports_data(REPORTS_NUM)
+
     print("Таблицы заполнены данными")
 
 
@@ -454,8 +435,8 @@ def get_coefficients_c(coefficients_id: int) -> list:
 # Возвращает ид функции, которая привязана к должности, если все прошло успешно, в противном случае - False
 def get_function_id_by_position_id(position_id: int) -> int | bool:
     cur.execute(f"SELECT functions_id FROM positions WHERE position_id={position_id}")
-    res = cur.fetchone()[0]
-    return res if res is not None else False
+    res = cur.fetchone()
+    return res[0] if res is not None else False
 
 
 # Добавляет одну запись в таблицу company, возвращает: True - если прошло успешно, в противном случае - False
@@ -485,7 +466,8 @@ def add_position(position_name: str, salary: float, function_id: int, company_id
 def add_employee(name: str, email: str, phone: str, position_id: int, function_id: int) -> bool:
     try:
         cur.execute(
-            f"insert into employee(name, email, phone, position_id, function_id) values('{name}','{email}','{phone}',{position_id},{function_id})")
+            f"insert into employee(name, email, phone, position_id, function_id) "
+            f"values('{name}','{email}','{phone}',{position_id},{function_id})")
         con.commit()
         return True
     except:
@@ -494,25 +476,18 @@ def add_employee(name: str, email: str, phone: str, position_id: int, function_i
 
 
 # Возвращает список всех записей из таблицы positions
-def get_all_positions() -> list:
-    cur.execute(
-        "select functions.name, positions.position_name, positions.salary from positions INNER JOIN functions ON positions.functions_id=functions.function_id")
+def get_all_positions(company_id: int) -> list:
+    if company_id == SUPERUSER_ID:
+        cur.execute(
+            "select positions.position_id, functions.name, positions.position_name, positions.salary from positions "
+            "INNER JOIN functions ON positions.functions_id=functions.function_id")
+    else:
+        cur.execute(
+            f"select positions.position_id, functions.name, positions.position_name, positions.salary from positions "
+            f"INNER JOIN functions ON positions.functions_id=functions.function_id WHERE company_id = {company_id}")
     res = cur.fetchall()
     con.commit()
     return res
-
-
-def get_positions(company_id) -> list:
-    if company_id == 100:
-        cur.execute(f"select position_id,position_name from positions")
-        res = cur.fetchall()
-        con.commit()
-        return res
-    else:
-        cur.execute(f"select position_id,position_name from positions where company_id ={company_id}")
-        res = cur.fetchall()
-        con.commit()
-        return res
 
 
 # Возвращает список всех записей из таблицы functions
@@ -524,12 +499,17 @@ def get_all_functions() -> list:
 
 
 # Возвращает список всех записей из таблицы employee
-def get_all_employees() -> list:
-    cur.execute(
-        'select employee.name, employee.email, employee.phone, positions.position_name, functions.name, company.name from employee '
-        'INNER JOIN positions ON employee.position_id=positions.position_id '
-        'INNER JOIN functions ON employee.function_id=functions.function_id '
-        'INNER JOIN company ON employee.company_id=company.company_id')
+def get_all_employees(company_id: int) -> list:
+    if company_id == SUPERUSER_ID:
+        cur.execute(
+            'SELECT employee.name, employee.email, employee.phone, positions.position_name, functions.name from '
+            'employee INNER JOIN positions ON employee.position_id=positions.position_id INNER JOIN functions ON '
+            'employee.function_id=functions.function_id ')
+    else:
+        cur.execute(
+            f'SELECT employee.name, employee.email, employee.phone, positions.position_name,functions.name from positions INNER JOIN '
+            f'employee ON positions.position_id=employee.position_id INNER JOIN functions ON '
+            f'positions.functions_id=functions.function_id WHERE company_id={company_id}')
     res = cur.fetchall()
     con.commit()
     return res
@@ -547,6 +527,7 @@ def get_all_company() -> list:
 def get_company(login: str, password: str) -> list | bool:
     cur.execute(f"SELECT * FROM company WHERE login='{login}' and password ='{password}'")
     res = cur.fetchone()
+    con.commit()
     return res if res != None else False
 
 
@@ -580,8 +561,6 @@ def coef_abc_add(coefs_abc_weight: list,
         return cur.fetchone()
     except:
         con.commit()
-        raise
-        print("stop")
         return False
 
 
@@ -609,14 +588,16 @@ def add_function_sql(coefficients_id, name):
         return False
 
 
-def get_company_name(id: int) -> str:
+def get_company_name_by_id(id: int) -> str:
     cur.execute(f'select name from company where company_id={id}')
     return cur.fetchone()[0]
+
 
 # Создание суперюзера с id 100
 def create_superuser():
     cur.execute("insert into company(company_id,name,login,password) values(100,'ASH inc.', 'root','root')")
     con.commit()
+
 
 # Ручное заполнение таблиц coefficients, positions, employee
 def test_coeffs():
@@ -652,12 +633,15 @@ def test_coeffs():
                 f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
     con.commit()
 
+
 def test_function():
     function_id = 100
     coefficients_id = 100
     name = 'Кипсолид'
-    cur.execute(f"INSERT INTO functions(function_id, coefficients_id, name) VALUES({function_id},{coefficients_id}, '{name}')")
+    cur.execute(
+        f"INSERT INTO functions(function_id, coefficients_id, name) VALUES({function_id},{coefficients_id}, '{name}')")
     con.commit()
+
 
 def test_position():
     position_id = 100
@@ -696,7 +680,8 @@ def test_inserts():
     test_position()
     test_employee()
 
-def calculate_report(report: object, coefs: object) -> int:
+
+def calculate_report(report: object, coefs: object, position_id: int, company_id: int) -> object | str:
     budget_diff = report.budget_plan - report.budget_spend
     if budget_diff < 0:
         return f"Бюджет перерасходован. Премии невозможны. Сумма нестачи бюджета - {budget_diff}"
@@ -705,70 +690,71 @@ def calculate_report(report: object, coefs: object) -> int:
                         budget_diff * coefs.coefs_abc_weight[1],
                         budget_diff * coefs.coefs_abc_weight[2]]
     print("Суммы равны - ", budget_diff == sum(bonuses_sum_list))
-    bonuses_a_sum_list = list()  # сумма начисленной премии на каждый подраздел A
-    weight_a_percentage = list() # на какой % был выполненен план подраздела А
+    bonuses_a_coef_list = list()  # значение коєфициента премии на каждый подраздел A
+    weight_a_percentage = list()  # на какой % был выполненен план подраздела А
     print("Раздел А")
     # раздел а
     for index, line in enumerate(coefs.coef_a_names):
-        print(f"*****\n"
-              f"weight_a_percentage.append(report.completed_amount[index] / (report.amount_plan[index] / 100))\n"
-              f"{int(report.completed_amount[index]) / (int(report.amount_plan[index]) / 100)} % \n"
-              f"*****\n")
-        weight_a_percentage.append(int(report.completed_amount[index]) / (int(report.amount_plan[index]) / 100)) # на сколько % вып. план подраздела А
-
-        for index_weight,value in enumerate(coefs.coef_a_bottom_all_values[index]): # узнаем че там он получит за это
-            if weight_a_percentage[index] > coefs.coef_a_top_all_values[index][index_weight]: # проверяем не больше ли верхнего порога диапазона
-
-                if index_weight < len(coefs.coef_a_bottom_all_values[index]) - 1: # проверяем не вышли ли за пределы массива
+        weight_a_percentage.append(int(report.completed_amount[index]) / (
+                    int(report.amount_plan[index]) / 100))  # на сколько % вып. план подраздела А
+        for index_weight, value in enumerate(coefs.coef_a_bottom_all_values[index]):  # узнаем че там он получит за это
+            if weight_a_percentage[index] / 100 > coefs.coef_a_top_all_values[index][
+                index_weight]:  # проверяем не больше ли верхнего порога диапазона
+                if index_weight < len(
+                        coefs.coef_a_bottom_all_values[index]) - 1:  # проверяем не вышли ли за пределы массива
                     continue
 
-                else: # если % больше верхнего порога и у нас последний элемент массива
+                else:  # если % больше верхнего порога и у нас последний элемент массива
                     """
                         Вес подраздела * коэфициент диапазона / % выполненного плана
                         Вес подраздела -> coefs.coef_a_name_weight[index] 
                         коэфициент диапазона -> coef_a_all_weights[index][index_weight]
                         % выполненного плана -> weight_percentage[index]
                     """
-                    print(f"*****\n"
-                          f"качеля: {coefs.coef_a_bottom_all_values[index][index_weight]} < x < {coefs.coef_a_top_all_values[index][index_weight]}\n"
-                          f"index = {index} index_weight = {index_weight}\n"
-                          f"bonuses_a_sum_list.append((coefs.coef_a_name_weight[{index}] * coef_a_all_weights[{index}][{index_weight}]) / weight_a_percentage[{index}])\n"
-                          f"{(coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) / weight_a_percentage[index]}\n"
-                          f"*****\n")
-                    bonuses_a_sum_list.append((coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) / weight_a_percentage[index])
+                    count = round((coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) /
+                                  weight_a_percentage[index], 4)
+                    bonuses_a_coef_list.append(count)
+                    break
             else:
-                print(f"*****\n"
-                      f"качеля: {coefs.coef_a_bottom_all_values[index][index_weight]} < x < {coefs.coef_a_top_all_values[index][index_weight]}\n"
-                      f"index = {index} index_weight = {index_weight}\n"
-                      f"bonuses_a_sum_list.append((coefs.coef_a_name_weight[{index}] * coef_a_all_weights[{index}][{index_weight}]) / weight_a_percentage[{index}])\n"
-                      f"{(coefs.coef_a_name_weight[index] * coef_a_all_weights[index][index_weight]) / weight_a_percentage[index]}\n"
-                      f"*****\n")
-                bonuses_a_sum_list.append((coefs.coef_a_name_weight[index] * coef_a_all_weights[index][index_weight]) / weight_a_percentage[index])
-    bonuses_b_sum_list = list()  # сумма начисленной премии на каждый подраздел B
-
-    print("Раздел Б")
-    # раздел б
+                count = round((coefs.coef_a_name_weight[index] * coefs.coef_a_all_weights[index][index_weight]) /
+                              weight_a_percentage[index], 4)
+                bonuses_a_coef_list.append(count)
+                break
+    bonuses_b_coef_list = list()  # сумма начисленной премии на каждый подраздел B
+    print("Раздел Б")  # раздел б
     for index, line in enumerate(coefs.coef_b_names):
         # вес * КПЭ (оценка) / коэфициент
-        print(f"******\n"
-              f"coefs.coef_b_name_weight[index] * report.completed_quality[index] ) / coefs.coef_b_weight[index]\n"
-              f"coefs.coef_b_name_weight[{index}] * int(report.completed_quality[{index}]) ) / coefs.coef_b_weight\n"
-              f"{coefs.coef_b_name_weight[index]} * {int(report.completed_quality[index])} ) / {coefs.coef_b_weight} = {(coefs.coef_b_name_weight[index] * int(report.completed_quality[index]) ) / coefs.coef_b_weight}\n"
-              f"*****\n")
-        bonuses_b_sum_list.append(
-            ( coefs.coef_b_name_weight[index] * int(report.completed_quality[index]) ) / coefs.coef_b_weight
-        )
-    bonuses_c_sum_list = list()  # сумма начисленной премии на каждый подраздел C
-    # раздел с
-    print("Раздел С")
+        count = round(
+            (coefs.coef_b_name_weight[index] / 100 * int(report.completed_quality[index])) / coefs.coef_b_weight, 4)
+        bonuses_b_coef_list.append(count)
+    bonuses_c_coef_list = list()  # сумма начисленной премии на каждый подраздел C
+    print("Раздел С")  # раздел с
     for index, line in enumerate(coefs.coef_c_names):
         # вес * КПЭ (оценка) / коэфициент
-        print(f"******\n"
-              f"coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight\n"
-              f"coefs.coef_c_name_weight[{index}] * int(report.completed_task[{index}]) ) / coefs.coef_c_weight\n"
-              f"({coefs.coef_c_name_weight[index]} * {int(report.completed_task[index])} ) / {coefs.coef_c_weight} = {(coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight}\n"
-              f"*****\n")
-        bonuses_c_sum_list.append(
-            ( coefs.coef_c_name_weight[index] * int(report.completed_task[index]) ) / coefs.coef_c_weight
-        )
-    print("BREAKPOINT")   # </заебца>
+        count = round((coefs.coef_c_name_weight[index] / 100 * int(report.completed_task[index])) / coefs.coef_c_weight,
+                      4)
+        bonuses_c_coef_list.append(count)
+    calc = calculated_report(bonuses_sum_list, bonuses_a_coef_list, bonuses_b_coef_list, bonuses_c_coef_list)
+    return create_report(report, calc, position_id, company_id)
+
+
+def create_report(report: object, calculated_report: object, position_id: int, company_id: int) -> int:
+    cur.execute(f'select position_name from positions where position_id={position_id}')
+    # position_id = session['position_id']
+    # company_id = session['company_id']
+    cur.execute(
+        f"insert into reports(position_id,company_id,amount_plan,completed_amount,completed_quality,completed_tasks,budget_plan,budget_spend,bonuses_abc_sum_list,bonuses_a_coef_list,bonuses_b_coef_list,bonuses_c_coef_list) values({position_id},{company_id},ARRAY{report.amount_plan},ARRAY{report.completed_amount},ARRAY{report.completed_quality},ARRAY{report.completed_task},{report.budget_plan},{report.budget_spend},ARRAY{calculated_report.bonuses_abc_sum_list},ARRAY{calculated_report.bonuses_a_coef_list},ARRAY{calculated_report.bonuses_b_coef_list},ARRAY{calculated_report.bonuses_c_coef_list})")
+    con.commit()
+    cur.execute("SELECT orders_id FROM reports ORDER BY orders_id DESC LIMIT 1;")
+    return cur.fetchone()[0]
+
+
+def get_report(report_id):
+    cur.execute(f"select * from reports where orders_id={report_id}")
+    res = cur.fetchone()
+    return res
+
+
+def get_position_name(position_id: int) -> str:
+    cur.execute(f"select * from positions where position_id={position_id}")
+    return cur.fetchone()[0]

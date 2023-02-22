@@ -1,5 +1,28 @@
 {%extends "basic.html"%}
 
 {%block main%}
+<h1>
+    Отчёт компании (id){{company_name}} по должности (id){{position_name}}
+</h1>
+<h2>Запланированное кол-во по целям:</h2>
+<p>{{data.amount_plan}}</p>
+<h2>Реализованное кол-во по целям:</h2>
+<p>{{data.completed_amount}}</p>
+<h2>Оценка качества:</h2>
+<p>{{data.completed_quality}}</p>
+<h2>Оценка проэктных задач:</h2>
+<p>{{data.completed_task}}</p>
+<h2>Запланированый бюджет:</h2>
+<p>{{data.budget_plan}}</p>
+<h2>Потраченный:</h2>
+<p>{{data.budget_spend}}</p>
+<h2>Список сумм по разделам:</h2>
+<p>{{data.bonuses_abc_sum_list}}</p>
+<h2>Значения коэфициентов раздела А:</h2>
+<p>{{data.bonuses_a_coef_list}}</p>
+<h2>Значения коэфициентов раздела Б:</h2>
+<p>{{data.bonuses_b_coef_list}}</p>
+<h2>Значения коэфициентов раздела С:</h2>
+<p>{{data.bonuses_c_coef_list}}</p>
 
 {%endblock%}
