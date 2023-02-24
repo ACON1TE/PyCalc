@@ -146,7 +146,7 @@ def view_coefficients():
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-# поменять роут
+
 @app.route('/view_positions', methods=['GET'])
 def view_positions():
     return render_template('positions.html', company_name=get_company_name_by_id(session['company_id']),
