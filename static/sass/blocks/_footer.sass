@@ -1,0 +1,42 @@
+.footer
+  background-color: $colorPrimary
+  padding: 20px 0
+  font-weight: 400
+  font-size: 19px
+  line-height: 23px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 50px
+  &__list
+    list-style: none
+    padding: 0
+    margin: 0
+    display: flex
+    gap: 50px
+  &__link
+    color: $colorSecondary
+    position: relative
+    &:after
+      content: ''
+      position: absolute
+      width: 100%
+      height: 3px
+      background-color: $backgroundSecondary
+      left: 0
+      bottom: -10px
+      transition: all 0.5s
+      transform: scaleX(0)
+    &:hover
+      &:after
+        transform: scaleX(1)
+    &--active
+      &:after
+        transform: scaleX(1)
+  &__block
+    display: flex
+    flex-direction: column
+    gap: 10px
+    text-align: center
+    opacity: 0.5

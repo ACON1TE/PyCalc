@@ -1,32 +1,95 @@
-{%extends "basic.html"%}
+{%extends "basic_dashboard.html"%}
 
-{%block main%}
-<h1>{{mes}}</h1>
-<form name = “employe_form” method="post" action="/add_employee">
-    <p>Имя</p>
-    <input name="name" type="text" required>
-    <p>email</p>
-    <input name="email" type="text" required>
-    <p>Номер телефона</p>
-    <input name="phone" type="text">
-    <p>Должность</p>
-    <select name="position_id">
-         {%for tag in html%}
-        <option value="{{tag[0]}}" class="">{{tag[1]}}</option>
-        {%endfor%}
-    </select>
-
-    <!-- прост для теста сессии -->
-    <p>Компания - {{company}}</p>
-
-    <button name="submit" type="submit">Добавить сотрудника</button>
-</form>
+{%block title%}
+<title>Додати працівника | Premium Calculator</title>
 {%endblock%}
-<!--
-    name - строка неограниченного размера, не может быть пустым -> имя сотрудника
-    email - строка неограниченного размера -> электронная почта
-    phone - строка неограниченного размера -> номер телефона
-    position_id - целое число, внешний ключ на таблицу positions (поле->position_id) -> посылает на должность
-    function_id - целое число, внешний ключ на таблицу functions (поле->function_id) -> посылает на функцию разчета премии
-    company_id - целое число, внешний ключ на таблицу company (поле->company_id) -> посылает на компанию
--->
+
+{%block aside%}
+<aside class="dashboard__aside">
+    <a href="/home" class="logo dashboard__logo">
+        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
+    </a>
+    <a href="#" class="dashboard__profile">{{company_name}}</a>
+    <nav class="dashboard__nav">
+        <ul class="dashboard__list">
+            <li class="dashboard__list-item">
+                <a href="/home" class="dashboard__link">
+                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
+                    <span class="dashboard__link-text">Головна</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_positions" class="dashboard__link">
+                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Посади</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_employees" class="dashboard__link dashboard__link--active">
+                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Працівники</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/documents" class="dashboard__link">
+                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Документи</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/settings" class="dashboard__link">
+                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Налаштування</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+{%endblock%}
+
+{%block content%}
+<div class="employees dashboard__employees">
+    <a href="/view_employees" class="employees__return">Працівники</a>
+    <h1 class="employees__title">{{mes}}</h1>
+    <form action="/add_employee" method="POST" class="employees__form">
+        <label class="employees__label">
+            Ім'я
+            <input type="text" name="name" class="employees__input"/>
+        </label>
+        <label class="employees__label">
+            Електронна пошта
+            <input type="text" name="email" class="employees__input"/>
+        </label>
+        <label class="employees__label">
+            Номер телефону
+            <input type="text" name="phone" class="employees__input" placeholder="+380 12 345 67 89"/>
+        </label>
+        <span class="employees__label">
+                Посада
+                <select name="position_id" id="original-select" class="employees__select-container">
+                    <option value="-1">Оберіть посаду</option>
+                    {%for position in positions%}
+                        <option value="{{position[0]}}">{{position[2]}}</option>
+                    {%endfor%}
+                </select>
+            <!-- This is the container for the custom select -->
+<!--                <div class="custom-select-container">-->
+<!--                  <div class="custom-select-trigger">Оберіть посаду</div>-->
+<!--                  <div class="custom-select-options">-->
+<!--                    <div class="custom-select-option" data-value="1">Будь-яка посада із БД</div>-->
+<!--                    <div class="custom-select-option" data-value="2">Якась посада із БД</div>-->
+<!--                    <div class="custom-select-option" data-value="3">Ще одна посада</div>-->
+<!--                  </div>-->
+<!--                </div>-->
+              </span>
+        <button class="button employees__button button--primary" type="submit">Зберегти</button>
+    </form>
+</div>
+<!-- /.employees -->
+{%endblock%}
+
+{%block scripts%}
+<script src="../static/js/preloader.js"></script>
+<!--<script src="../static/js/custom-select.js"></script>-->
+<script src="../static/js/dashboard/employee.js"></script>
+{%endblock%}

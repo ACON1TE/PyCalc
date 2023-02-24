@@ -1,0 +1,144 @@
+.employees
+  &__title
+    font-weight: 700
+    font-size: 39px
+    line-height: 48px
+    margin-bottom: 100px
+  &__wrapper
+    display: flex
+    align-items: center
+    gap: 30px
+    margin-bottom: 30px
+  &__search
+    padding: 21px
+    background-color: $backgroundSecondary
+    border-radius: 10px
+    &-input
+      width: 225px
+      font-weight: 400
+      font-size: 12px
+      line-height: 15px
+      padding: 9px 27px
+      background-color: $colorPrimary
+      border-radius: 10px
+    &-form
+      position: relative
+      &:before
+        content: ''
+        position: absolute
+        display: block
+        width: 13px
+        height: 13px
+        top: 50%
+        left: 7px
+        transform: translateY(-50%)
+        background-image: url(../images/icons/glass.svg)
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: cover
+  &__link
+    padding: 10px
+    background-color: $backgroundSecondary
+    border-radius: 10px
+  &__cards
+    padding: 22px
+    background-color: $backgroundSecondary
+    border-radius: 15px
+    color: $colorSecondary
+  &__item
+    display: flex
+    flex-direction: column
+    gap: 40px
+    padding: 21px 30px
+    background-color: $colorPrimary
+    border-radius: 10px
+    &-text
+      font-weight: 600
+      font-size: 16px
+      line-height: 20px
+    &:not(:last-child)
+      margin-bottom: 20px
+  &__row
+    display: flex
+    justify-content: space-between
+    &--hidden
+      display: none
+  &__switcher
+    display: block
+    position: relative
+    width: 20px
+    height: 20px
+    text-align: center
+    &--active
+      .employees__switcher-item:nth-child(2)
+        transform: translate(-50%, -50%) rotate(0deg)
+    &-item
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+      width: 20px
+      height: 2px
+      background-color: $colorSecondary
+      border-radius: 1px
+      transition: transform 0.15s ease
+      &:nth-child(2)
+        transform: translate(-50%, -50%) rotate(90deg)
+  &__value
+    padding: 5px 10px
+    background-color: $backgroundSecondary
+    font-weight: 400
+    font-size: 16px
+    line-height: 20px
+    color: #997109
+    border-radius: 6px
+    margin-left: 9px
+  &__return
+    position: relative
+    display: inline-block
+    font-weight: 600
+    font-size: 28px
+    line-height: 34px
+    padding-left: 30px
+    margin-bottom: 40px
+    &:before
+      content: ""
+      position: absolute
+      display: block
+      width: 13px
+      height: 22px
+      top: 50%
+      left: 0
+      transform: translateY(-50%)
+      background-image: url(../images/icons/return.svg)
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: cover
+  &__form
+    display: flex
+    justify-content: space-between
+    flex-wrap: wrap
+    gap: 30px
+  &__label
+    display: flex
+    flex-direction: column
+    gap: 10px
+    width: 46%
+  &__input
+    padding: 20px 25px
+    font-weight: 400
+    font-size: 18px
+    border-radius: 8px
+    border: 2px solid $colorPrimary
+    transition: border 0.15s ease
+    &:focus
+      border: 2px solid $backgroundSecondary
+  &__select
+    opacity: 0
+    visibility: hidden
+    position: absolute
+  &__button
+    display: inline-block
+    cursor: pointer
+    padding: 16px 75px
+    margin: 100px auto 0 auto

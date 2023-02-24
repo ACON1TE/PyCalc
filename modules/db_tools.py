@@ -119,7 +119,7 @@ def create_db() -> None:
     """
     cur.execute('''CREATE TABLE positions(position_id SERIAL PRIMARY KEY NOT NULL,
                                           functions_id INTEGER REFERENCES functions (function_id),
-                                          position_name TEXT UNIQUE NOT NULL,
+                                          position_name TEXT NOT NULL,
                                           salary REAL,
                                           company_id INTEGER REFERENCES company (company_id));''')
     con.commit()
@@ -504,14 +504,14 @@ def get_all_employees(company_id: int) -> list:
     global SUPERUSER_ID
     if company_id == SUPERUSER_ID:
         cur.execute(
-            'SELECT employee.name, employee.email, employee.phone, positions.position_name, functions.name from '
-            'employee INNER JOIN positions ON employee.position_id=positions.position_id INNER JOIN functions ON '
-            'employee.function_id=functions.function_id ')
+            'SELECT employee.name, positions.salary, employee.email, employee.phone, positions.position_name, '
+            'functions.name from employee INNER JOIN positions ON employee.position_id=positions.position_id INNER '
+            'JOIN functions ON employee.function_id=functions.function_id ')
     else:
         cur.execute(
-            f'SELECT employee.name, employee.email, employee.phone, positions.position_name,functions.name from positions INNER JOIN '
-            f'employee ON positions.position_id=employee.position_id INNER JOIN functions ON '
-            f'positions.functions_id=functions.function_id WHERE company_id={company_id}')
+            f'SELECT employee.name, positions.salary, employee.email, employee.phone, positions.position_name,'
+            f'functions.name from positions INNER JOIN employee ON positions.position_id=employee.position_id INNER '
+            f'JOIN functions ON positions.functions_id=functions.function_id WHERE company_id={company_id}')
     res = cur.fetchall()
     con.commit()
     return res

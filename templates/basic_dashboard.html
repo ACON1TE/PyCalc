@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ua">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/main.css" />
+    <link rel="shortcut icon" href="../static/images/icons/favicon.svg" />
+    {%block title%}
+
+    {%endblock%}
+  </head>
+  <div id="preloader" class="preloader">
+    <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator" class="preloader__image" />
+  </div>
+  <main class="calc">
+    <div class="dashboard calc__dashboard">
+      {%block aside%}
+
+      {%endblock%}
+      <div class="content dashboard__content">
+        {%block content%}
+
+        {%endblock%}
+      </div>
+      <!-- /.dashboard__content -->
+    </div>
+    <!-- /.dashboard -->
+  </main>
+  {%block scripts%}
+
+  {%endblock%}
+
+</html>

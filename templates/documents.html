@@ -1,7 +1,7 @@
 {%extends "basic_dashboard.html"%}
 
 {%block title%}
-<title>Створення формули | Premium Calculator</title>
+<title>Документи | Premium Calculator</title>
 {%endblock%}
 
 {%block aside%}
@@ -31,7 +31,7 @@
                 </a>
             </li>
             <li class="dashboard__list-item">
-                <a href="/documents" class="dashboard__link">
+                <a href="/documents" class="dashboard__link dashboard__link--active">
                     <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
                     <span class="dashboard__link-text">Документи</span>
                 </a>
@@ -48,19 +48,38 @@
 {%endblock%}
 
 {%block content%}
-<div class="function dashboard__function">
-    <h1 class="function__title">Введіть назву для нової формули</h1>
-    <form class="function__form" name="function_form" method="POST" action="/add_function">
-        <label class="function__label">
-            Назва формули
-            <input class="function__input" type="text" name="function_name"/>
-        </label>
-        <button class="button function__button button--primary" name="submit" type="submit">Зберегти</button>
+<div class="documents dashboard__documents">
+    <h1 class="documents__title">Завантаження звіту</h1>
+    <p class="documents__description">
+        Тут Ви можете завантажити звіт про Ваші посади, ефективність та їх премію за місяць
+    </p>
+    <form action="/add_report" method="POST" class="documents__form">
+        <select name="position_id" id="original-select" class="documents__select-container">
+            <option value="-1">Оберіть посаду</option>
+            {%for position in positions%}
+                <option value="{{position[0]}}">{{position[2]}}</option>
+            {%endfor%}
+        </select>
+        <!-- This is the container for the custom select -->
+<!--        <div class="custom-select-container documents__select-container">-->
+<!--            <div class="custom-select-trigger documents__select-trigger">Оберіть формулу</div>-->
+<!--            <div class="custom-select-options documents__select-options">-->
+<!--                <div class="custom-select-option documents__select-option" data-value="1">Якась посада із БД</div>-->
+<!--                <div class="custom-select-option documents__select-option" data-value="2">Ще одна посада</div>-->
+<!--                <div class="custom-select-option documents__select-option" data-value="3">-->
+<!--                    Дизайнери, потримайте моє пиво-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <button class="button documents__button button--primary" type="submit">Завантажити звіт</button>
     </form>
 </div>
-<!-- /.function -->
+<!-- /.documents -->
 {%endblock%}
 
 {%block scripts%}
 <script src="../static/js/preloader.js"></script>
+<!--<script src="../static/js/custom-select.js"></script>-->
+<script src="../static/js/dashboard/documents.js"></script>
 {%endblock%}
+

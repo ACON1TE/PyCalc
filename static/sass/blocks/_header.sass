@@ -1,0 +1,41 @@
+.header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  font-weight: 400
+  font-size: 21px
+  line-height: 26px
+  &__list
+    list-style: none
+    padding: 0
+    margin: 0
+    display: flex
+    gap: 50px
+  &__link
+    color: $colorPrimary
+    position: relative
+    &:after
+      content: ''
+      position: absolute
+      width: 100%
+      height: 3px
+      background-color: $backgroundSecondary
+      left: 0
+      bottom: -10px
+      transition: all 0.5s
+      transform: scaleX(0)
+    &:hover
+      &:after
+        transform: scaleX(1)
+    &--active
+      &:after
+        transform: scaleX(1)
+  &__switcher
+    color: $colorPrimary
+    &-link
+      &--active
+        color: $backgroundSecondary
+  &__buttons
+    display: flex
+    align-items: center
+    gap: 24px

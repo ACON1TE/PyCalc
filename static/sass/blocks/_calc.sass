@@ -1,0 +1,31 @@
+.calc
+  background-color: $backgroundPrimary
+  width: 100%
+  height: 100%
+  position: relative
+  &__header
+    padding: 40px 0
+  &__nothing-important-block-about-project
+    position: absolute
+    background-color: transparent
+    width: 10px
+    height: 10px
+    cursor: pointer
+    &-photo
+      position: absolute
+      width: 100vw
+      height: 100vh
+      background-image: url(https://i.ibb.co/CP7b1j4/mariia.jpg)
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: contain
+      display: none
+      z-index: 1000
+      color: white
+      font-size: 24px
+      text-align: center
+      padding-top: 10px
+      &--active
+        display: block
+  &__login, &__registration
+    padding: 136px 0

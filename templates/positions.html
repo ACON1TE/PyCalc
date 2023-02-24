@@ -1,0 +1,110 @@
+{%extends "basic_dashboard.html"%}
+
+{%block title%}
+<title>Посади | Premium Calculator</title>
+{%endblock%}
+
+{%block aside%}
+<aside class="dashboard__aside">
+    <a href="/home" class="logo dashboard__logo">
+        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
+    </a>
+    <a href="#" class="dashboard__profile">{{company_name}}</a>
+    <nav class="dashboard__nav">
+        <ul class="dashboard__list">
+            <li class="dashboard__list-item">
+                <a href="/home" class="dashboard__link">
+                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
+                    <span class="dashboard__link-text">Головна</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_positions" class="dashboard__link dashboard__link--active">
+                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Посади</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_employees" class="dashboard__link">
+                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Працівники</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/documents" class="dashboard__link">
+                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Документи</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/settings" class="dashboard__link">
+                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Налаштування</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+{%endblock%}
+
+{%block content%}
+<div class="positions dashboard__positions">
+    <h1 class="positions__title">Додавання нової посади</h1>
+    <div class="positions__wrapper">
+        <div class="positions__block positions__created">
+            <h2 class="positions__block-title">Створені посади</h2>
+            {%if positions|length > 0 %}
+                {%for position in positions %}
+                        <span class="positions__block-item">{{position[2]}}</span>
+                {%endfor%}
+            {%else%}
+                <span class="positions__block-item">Посад немає</span>
+            {%endif%}
+        </div>
+        <!-- /.positions__block -->
+        <form action="/add_positions" id="positions_form" class="positions__block" method="POST">
+            <h2 class="positions__block-title">Додати посаду</h2>
+            <input
+                    type="text"
+                    class="positions__block-input"
+                    name="position_name"
+                    placeholder="Введіть назву посади..."
+            />
+            <input
+                    type="number"
+                    class="positions__block-input"
+                    name="salary"
+                    placeholder="Введіть розмір окладу"
+            />
+            <select name="functions_id" id="original-select" class="positions__select-container">
+                <option value="-1">Оберіть формулу</option>
+                {%for function in functions%}
+                    <option value="{{function[0]}}">{{function[1]}}</option>
+                {%endfor%}
+            </select>
+            <!-- This is the container for the custom select -->
+            <!--            <div class="custom-select-container positions__select-container">-->
+            <!--                <div class="custom-select-trigger positions__select-trigger">Оберіть посаду</div>-->
+            <!--                <div class="custom-select-options positions__select-options">-->
+            <!--                    <div class="custom-select-option positions__select-option" data-value="1">Перша формула</div>-->
+            <!--                    <div class="custom-select-option positions__select-option" data-value="2">Друга формула</div>-->
+            <!--                    <div class="custom-select-option positions__select-option" data-value="3">-->
+            <!--                        Дизайнери, потримайте моє пиво-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <button class="button positions__block-button button--primary">Додати</button>
+        </form>
+        <!-- /.positions__block -->
+    </div>
+    <!-- /.positions__wrapper -->
+</div>
+<!-- /.positions -->
+{%endblock%}
+
+{%block scripts%}
+<script src="../static/js/preloader.js" type="text/javascript"></script>
+<!--<script src="../static/js/custom-select.js" type="text/javascript"></script>-->
+<script src="../static/js/dashboard/positions.js" type="text/javascript"></script>
+{%endblock%}
+
