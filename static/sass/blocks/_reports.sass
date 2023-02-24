@@ -1,0 +1,71 @@
+.reports
+  &__title
+    font-weight: 700
+    font-size: 33px
+    line-height: 40px
+    margin-bottom: 18px
+  &__subtitle
+    font-weight: 600
+    font-size: 24px
+    line-height: 1.5
+    margin-bottom: 50px
+  &__description
+    max-width: 850px
+    font-weight: 400
+    font-size: 24px
+    line-height: 29px
+    margin-bottom: 30px
+  &__section
+    margin-bottom: 50px
+  &__wrapper
+    &:not(:last-child)
+      margin-bottom: 40px
+  &__position
+    display: inline-block
+    font-weight: 700
+    font-size: 18px
+    line-height: 22px
+    margin-bottom: 30px
+    &-name
+      padding: 5px 10px
+      color: $colorSecondary
+      background-color: $backgroundSecondary
+      border-radius: 7px
+      cursor: pointer
+      margin-left: 7px
+  &__block
+    display: flex
+    gap: 40px
+  &__label
+    font-weight: 600
+    font-size: 14px
+    line-height: 16px
+    display: inline-flex
+    flex-direction: column
+    gap: 13px
+    cursor: pointer
+  &__input
+    text-align: center
+    max-width: 120px
+    padding: 12px 14px
+    border-radius: 5px
+    font-size: 14px
+    line-height: 16px
+    border: 2px solid $colorPrimary
+    transition: border 0.3s ease
+    &:focus
+      border: 2px solid $backgroundSecondary
+    &:disabled
+      background-color: darken($colorPrimary, 15%)
+    &[type="number"]
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button 
+        -webkit-appearance: none
+        margin: 0
+      &:hover, &:focus
+        appearance: none
+        -moz-appearance: textfield
+  &__button
+    display: block
+    margin: 0 auto
+    cursor: pointer

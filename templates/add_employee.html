@@ -66,21 +66,12 @@
         </label>
         <span class="employees__label">
                 Посада
-                <select name="position_id" id="original-select" class="employees__select-container">
+                <select name="position_id" id="original-select" class="select employees__select">
                     <option value="-1">Оберіть посаду</option>
                     {%for position in positions%}
                         <option value="{{position[0]}}">{{position[2]}}</option>
                     {%endfor%}
                 </select>
-            <!-- This is the container for the custom select -->
-<!--                <div class="custom-select-container">-->
-<!--                  <div class="custom-select-trigger">Оберіть посаду</div>-->
-<!--                  <div class="custom-select-options">-->
-<!--                    <div class="custom-select-option" data-value="1">Будь-яка посада із БД</div>-->
-<!--                    <div class="custom-select-option" data-value="2">Якась посада із БД</div>-->
-<!--                    <div class="custom-select-option" data-value="3">Ще одна посада</div>-->
-<!--                  </div>-->
-<!--                </div>-->
               </span>
         <button class="button employees__button button--primary" type="submit">Зберегти</button>
     </form>
@@ -90,6 +81,5 @@
 
 {%block scripts%}
 <script src="../static/js/preloader.js"></script>
-<!--<script src="../static/js/custom-select.js"></script>-->
 <script src="../static/js/dashboard/employee.js"></script>
 {%endblock%}

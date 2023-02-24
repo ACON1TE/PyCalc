@@ -1,37 +1,157 @@
-{%extends "basic.html"%}
+{%extends "basic_dashboard.html"%}
 
-{%block main%}
-<form name = “calculate_report_form” method="post" action="/calculate_report">
-    <label>Запланированный Бюджет</label>
-    <input type="number" step="1" name="budget_plan"><br>
-    <label>Потраченный бюджет</label>
-    <input type="number" step="1" name="budget_spend"><br><br>
-    <h1>
-        Введите запланированный и выполненный план по отделу '{{select}}'
-    </h1>
-    <h1>Раздел А - количественный</h1><br>
-    {%for tag in names_a%}
-    <label>Цель -> {{tag}}</label>
-    <label>Запланированно</label>
-    <input type="number" step="1" name="amount_plan">
-    <label>Выполненно</label>
-    <input type="number" step="1" name="completed_amount"><br><br>
-    {%endfor%}
-    <h1>Раздел Б - качественный</h1><br>
-    <label>Оценка выполненения (от {{bottom_b}} до {{top_b}})</label><br>
-    {%for tag in names_b%}
-    <label>Цель -> {{tag}}</label>
-    <label>Введите оценку:</label>
-    <input type="number" step="1" name="completed_quality"><br><br>
-    {%endfor%}
-    <h1>Раздел C - проектный</h1><br>
-    <label>Оценка выполненения (от {{c_bottom}} до {{c_top}})</label><br>
-    {%for tag in names_c%}
-    <label>Цель -> {{tag}}</label>
-    <label>Введите оценку:</label>
-    <input type="number" step="1" name="completed_task"><br><br>
-    {%endfor%}
-    <button name="submit" type="submit">Посчитать</button>
-</form>
-
+{%block title%}
+<title>Генерація звіту | Premium Calculator</title>
 {%endblock%}
+
+{%block aside%}
+<aside class="dashboard__aside">
+    <a href="/home" class="logo dashboard__logo">
+        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
+    </a>
+    <a href="#" class="dashboard__profile">{{company_name}}</a>
+    <nav class="dashboard__nav">
+        <ul class="dashboard__list">
+            <li class="dashboard__list-item">
+                <a href="/home" class="dashboard__link">
+                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
+                    <span class="dashboard__link-text">Головна</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_positions" class="dashboard__link">
+                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Посади</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/view_employees" class="dashboard__link">
+                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Працівники</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/documents" class="dashboard__link dashboard__link--active">
+                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Документи</span>
+                </a>
+            </li>
+            <li class="dashboard__list-item">
+                <a href="/settings" class="dashboard__link">
+                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Налаштування</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+{%endblock%}
+
+{%block content%}
+<div class="reports dashboard__reports">
+    <h1 class="reports__title">Генерація звіту</h1>
+    <p class="reports__description">
+        Щоб згенерувати звіт – введіть заплановані та фактичні показники продуктивності
+    </p>
+    <span class="reports__position">Відділ: <span class="reports__position-name">{{position_name}}</span></span>
+    <form action="/calculate_report" method="POST" class="reports__form">
+        <section class="reports__section">
+            <div class="reports__block">
+                <label class="reports__label">
+                    Запланований бюджет
+                    <input type="number" class="reports__input" step="1" name="budget_plan"
+                           placeholder="10000"/>
+                </label>
+                <label class="reports__label">
+                    Витрачений бюджет
+                    <input type="number" class="reports__input" step="1" name="budget_spend"
+                           placeholder="10000"/>
+                </label>
+            </div>
+            <!-- /.reports__block -->
+        </section>
+        <section class="reports__section">
+            <h2 class="reports__subtitle">Розділ А – кількісний</h2>
+            {%for tag in names_a%}
+            <div class="reports__wrapper">
+                                <span class="reports__position">Ціль: <span
+                                        class="reports__position-name">{{tag}}</span></span>
+                <div class="reports__block">
+                    <label class="reports__label">
+                        Заплановано
+                        <input type="number" class="reports__input" step="1" name="amount_plan"
+                               placeholder="10000"/>
+                    </label>
+                    <label class="reports__label">
+                        Виконано
+                        <input
+                                type="number"
+                                class="reports__input"
+                                step="1"
+                                name="completed_amount"
+                                placeholder="10000"
+                        />
+                    </label>
+                </div>
+                <!-- /.reports__block -->
+            </div>
+            <!-- /.reports__wrapper -->
+            {% endfor %}
+        </section>
+        <section class="reports__section">
+            <h2 class="reports__subtitle">Розділ Б – якісний</h2>
+            <span class="reports__position">Оцінка виконання від
+                <span class="reports__position-name">{{bottom_b}}</span>
+                до
+                <span class="reports__position-name">{{top_b}}</span>
+            </span>
+            {%for tag in names_b%}
+            <div class="reports__wrapper">
+                                <span class="reports__position">Ціль: <span
+                                        class="reports__position-name">{{tag}}</span></span>
+                <div class="reports__block">
+                    <label class="reports__label">
+                        Введіть оцінку
+                        <input type="number" class="reports__input" step="1" name="completed_quality"
+                               placeholder="2"/>
+                    </label>
+                </div>
+                <!-- /.reports__block -->
+            </div>
+            <!-- /.reports__wrapper -->
+            {% endfor %}
+        </section>
+        <section class="reports__section">
+            <h2 class="reports__subtitle">Розділ С – проєктний</h2>
+            <span class="reports__position">Оцінка виконання від
+                <span class="reports__position-name">{{c_bottom}}</span>
+                до
+                <span class="reports__position-name">{{c_top}}</span>
+            </span>
+            {%for tag in names_c%}
+            <div class="reports__wrapper">
+                            <span class="reports__position">Ціль: <span
+                                    class="reports__position-name">{{tag}}</span></span>
+                <div class="reports__block">
+                    <label class="reports__label">
+                        Введіть оцінку
+                        <input type="number" class="reports__input" step="1" name="completed_task"
+                               placeholder="2"/>
+                    </label>
+                </div>
+                <!-- /.reports__block -->
+            </div>
+            <!-- /.reports__wrapper -->
+            {% endfor %}
+        </section>
+        <button type="submit" class="button reports__button button--primary">Завантажити звіт</button>
+    </form>
+</div>
+<!-- /.reports -->
+{%endblock%}
+
+{%block scripts%}
+<script src="../static/js/preloader.js"></script>
+<script src="../static/js/dashboard/calculate_report.js"></script>
+{%endblock%}
+

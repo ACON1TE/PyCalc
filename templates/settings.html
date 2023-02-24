@@ -52,23 +52,12 @@
     <h1 class="settings__title">Налаштування</h1>
     <form action="/view_coefficients" method="POST" class="settings__form">
         <h2 class="settings__form-title">Система винагороджування</h2>
-        <select name="function_id" id="original-select" class="settings__select-container">
+        <select name="function_id" id="original-select" class="select settings__select">
             <option value="-1">Оберіть формулу</option>
             {%for function in functions%}
                 <option value="{{function[0]}}">{{function[1]}}</option>
             {%endfor%}
         </select>
-        <!-- This is the container for the custom select -->
-<!--        <div class="custom-select-container settings__select-container">-->
-<!--            <div class="custom-select-trigger settings__select-trigger">Оберіть формулу</div>-->
-<!--            <div class="custom-select-options settings__select-options">-->
-<!--                <div class="custom-select-option settings__select-option" data-value="1">Перша формула</div>-->
-<!--                <div class="custom-select-option settings__select-option" data-value="2">Друга формула</div>-->
-<!--                <div class="custom-select-option settings__select-option" data-value="3">-->
-<!--                    Дизайнери, потримайте моє пиво-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <button class="button settings__form-button button--primary" type="submit">Перевірити формулу</button>
     </form>
     <div class="settings__wrapper">
@@ -81,6 +70,5 @@
 
 {%block scripts%}
 <script src="../static/js/preloader.js"></script>
-<!--<script src="../static/js/custom-select.js"></script>-->
 <script src="../static/js/dashboard/settings.js"></script>
 {%endblock%}

@@ -6,6 +6,7 @@ con -> менять под себя
 
 import psycopg2
 import random
+import csv
 from modules.interfaces import *
 
 # подключение к БД
@@ -743,6 +744,11 @@ def calculate_report(report: object, coefs: object, position_id: int, company_id
                       4)
         bonuses_c_coef_list.append(count)
     calc = calculated_report(bonuses_sum_list, bonuses_a_coef_list, bonuses_b_coef_list, bonuses_c_coef_list)
+    with open('bullshit.csv', mode='w', newline='') as report_file:
+        report_writer = csv.writer(report_file)
+        report_writer.writerow(
+            ['Bonuses Sum List', 'Bonuses A Coef List', 'Bonuses B Coef List', 'Bonuses C Coef List'])
+        report_writer.writerow(bonuses_sum_list + bonuses_a_coef_list + bonuses_b_coef_list + bonuses_c_coef_list)
     return create_report(report, calc, position_id, company_id)
 
 
@@ -765,4 +771,4 @@ def get_report(report_id):
 
 def get_position_name(position_id: int) -> str:
     cur.execute(f"select * from positions where position_id={position_id}")
-    return cur.fetchone()[0]
+    return cur.fetchone()[2]

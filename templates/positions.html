@@ -68,31 +68,20 @@
                     type="text"
                     class="positions__block-input"
                     name="position_name"
-                    placeholder="Введіть назву посади..."
+                    placeholder="Назва посади"
             />
             <input
                     type="number"
                     class="positions__block-input"
                     name="salary"
-                    placeholder="Введіть розмір окладу"
+                    placeholder="Розмір окладу"
             />
-            <select name="functions_id" id="original-select" class="positions__select-container">
+            <select name="functions_id" id="original-select" class="select positions__select">
                 <option value="-1">Оберіть формулу</option>
                 {%for function in functions%}
                     <option value="{{function[0]}}">{{function[1]}}</option>
                 {%endfor%}
             </select>
-            <!-- This is the container for the custom select -->
-            <!--            <div class="custom-select-container positions__select-container">-->
-            <!--                <div class="custom-select-trigger positions__select-trigger">Оберіть посаду</div>-->
-            <!--                <div class="custom-select-options positions__select-options">-->
-            <!--                    <div class="custom-select-option positions__select-option" data-value="1">Перша формула</div>-->
-            <!--                    <div class="custom-select-option positions__select-option" data-value="2">Друга формула</div>-->
-            <!--                    <div class="custom-select-option positions__select-option" data-value="3">-->
-            <!--                        Дизайнери, потримайте моє пиво-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
             <button class="button positions__block-button button--primary">Додати</button>
         </form>
         <!-- /.positions__block -->
@@ -104,7 +93,6 @@
 
 {%block scripts%}
 <script src="../static/js/preloader.js" type="text/javascript"></script>
-<!--<script src="../static/js/custom-select.js" type="text/javascript"></script>-->
 <script src="../static/js/dashboard/positions.js" type="text/javascript"></script>
 {%endblock%}
 

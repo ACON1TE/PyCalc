@@ -1,6 +1,6 @@
-{%extends "basic.html"%}
+{%extends "basic_dashboard.html"%}
 
-{%block main%}
+{%block content%}
 <h1>
     Отчёт компании (id){{company_name}} по должности (id){{position_name}}
 </h1>
@@ -25,4 +25,8 @@
 <h2>Значения коэфициентов раздела С:</h2>
 <p>{{data.bonuses_c_coef_list}}</p>
 
+{%endblock%}
+
+{%block scripts%}
+<script src="../static/js/preloader.js"></script>
 {%endblock%}

@@ -6,13 +6,13 @@
 
 from modules.db_tools import *
 from werkzeug.utils import redirect
-from flask import Flask, request, session, render_template
+from flask import Flask, request, session, render_template, send_file
 
 app = Flask(__name__)
 
 app.config.update(
     # SECRET_KEY = 'ахуенно секретный ключ',
-    SECRET_KEY='cookies5',
+    SECRET_KEY='cookies3',
 )
 
 LOGIN_ALERT: str = "Вхід в особистий кабінет"
@@ -286,24 +286,6 @@ def add_function():
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-@app.route('/add_report', methods=['GET', 'POST'])
-def add_report():
-    if 'company_id' in session:
-        if request.method == 'POST':
-            select = request.form.get("position_id")
-            session["position_id"] = select
-            return redirect('/calculate_report')
-        else:
-            html = get_all_positions(session['company_id'])
-            if html:
-                return render_template('add_report.html', html=html)
-            else:
-                return render_template('add_report.html', html=[[999, 'должности не созданы']])
-    else:
-        session['route'] = '/section_abc'
-        return render_template('index.html', mes=LOGIN_ALERT)
-
-
 @app.route('/calculate_report', methods=['GET', 'POST'])
 def calculate_report_route():
     if 'company_id' in session:
@@ -324,17 +306,16 @@ def calculate_report_route():
                                          coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
                                          session['position_id'],
                                          session['company_id'])
-            if type(report_id) == str:
-                session['alert'] = report_id
-                return redirect('/show_report')
-            else:
-                session['report_id'] = report_id
-                return redirect('/show_report')
-            # return render_template("show_report.html", report_id=report_id)
+            del session['position_id']
+            return redirect('/download')
+            # if type(report_id) == str:
+            #     session['alert'] = report_id
+            #     return redirect('/show_report')
+            # else:
+            #     session['report_id'] = report_id
+            #     return redirect('/show_report')
         else:
             res = coefs(get_coef(get_function_id_by_position_id(session["position_id"])))
-            print(res.coef_c_bottom_value)
-            print(res.coef_c_top_value)
             return render_template("calculate_report.html",
                                    names_a=res.coef_a_names,
                                    names_b=res.coef_b_names,
@@ -342,7 +323,9 @@ def calculate_report_route():
                                    bottom_b=res.coef_b_bottom_value,
                                    top_b=res.coef_b_top_value,
                                    c_bottom=res.coef_c_bottom_value,
-                                   c_top=res.coef_c_top_value)
+                                   c_top=res.coef_c_top_value,
+                                   company_name=get_company_name_by_id(session['company_id']),
+                                   position_name=get_position_name(session['position_id']))
     else:
         session['route'] = '/section_abc'
         return render_template('index.html', mes=LOGIN_ALERT)
@@ -393,17 +376,27 @@ def settings():
 @app.route('/documents', methods=['GET', 'POST'])
 def documents():
     if 'company_id' in session:
-        return render_template('documents.html', company_name=get_company_name_by_id(session['company_id']),
-                               positions=get_all_positions(session['company_id']))
+        if request.method == 'POST':
+            select = request.form.get("position_id")
+            session["position_id"] = select
+            return redirect('/calculate_report')
+        else:
+            return render_template('documents.html', company_name=get_company_name_by_id(session['company_id']),
+                                   positions=get_all_positions(session['company_id']))
     else:
-        session['route'] = '/documents'
+        session['route'] = '/section_abc'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
+@app.route('/download_file')
+def download_file():
+    return send_file('bullshit.csv')
+
+
 if __name__ == "__main__":
-    drop_all()
-    create_db()
-    fill_db()
-    test_inserts()
+    # drop_all()
+    # create_db()
+    # fill_db()
+    # test_inserts()
 
     app.run()

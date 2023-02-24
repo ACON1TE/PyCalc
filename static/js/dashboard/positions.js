@@ -10,13 +10,10 @@ function createPosition() {
     let arrayAllPositions = Array.prototype.slice.call(allPositions);
     for (let i = 0; i < arrayAllPositions.length; i++) {
       if (input.value === arrayAllPositions[i].innerText) {
-        alert("Введіть унікальну назву посади!");
-        input.value = "";
         return false;
       }
     }
     if (input.value.trim().length === 0 || input.value.trim() === "Посад немає") {
-      alert("Введіть коректну назву посади!");
       return false;
     }
     return true;
