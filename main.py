@@ -48,7 +48,9 @@ def auth():
 # калитка
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template('homepage.html', company_name=get_company_name_by_id(session['company_id']))
+    return render_template('homepage.html', company_name=get_company_name_by_id(session['company_id']),
+                           positions=get_all_positions(session['company_id']), functions=get_data_function(),
+                           employees=get_all_employees(session['company_id']))
 
 
 # страница для ввода данных о компании
@@ -146,7 +148,6 @@ def view_coefficients():
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-
 @app.route('/view_positions', methods=['GET'])
 def view_positions():
     return render_template('positions.html', company_name=get_company_name_by_id(session['company_id']),
@@ -172,16 +173,18 @@ def section_abc():
             parse = True
             iter_main, iter = 1, 1
             while parse:
-                if request.form.get(f"title{iter_main}") is not None:
-                    titles_a.append(request.form.get(f"title{iter_main}"))
-                    weights_a.append(float(request.form.get(f"weight{iter_main}")))
+                if request.form.get(f"title{iter_main}_a") is not None:
+                    titles_a.append(request.form.get(f"title{iter_main}_a"))
+                    weights_a.append(float(request.form.get(f"weight{iter_main}_a")))
                     ranges_min_a.append(list())
                     ranges_max_a.append(list())
                     coefs_a.append(list())
                     while True:
                         if request.form.get(f"range_min{iter_main}_{iter}") is not None:
-                            ranges_min_a[iter_main - 1].append(float(request.form.get(f"range_min{iter_main}_{iter}")))
-                            ranges_max_a[iter_main - 1].append(float(request.form.get(f"range_max{iter_main}_{iter}")))
+                            ranges_min_a[iter_main - 1].append(
+                                float(request.form.get(f"range_min{iter_main}_{iter}")) / 100.0)
+                            ranges_max_a[iter_main - 1].append(
+                                float(request.form.get(f"range_max{iter_main}_{iter}")) / 100.0)
                             coefs_a[iter_main - 1].append(float(request.form.get(f"coef{iter_main}_{iter}")))
                             iter += 1
                         else:
@@ -262,9 +265,10 @@ def add_function():
                 res = add_function_sql(session['coefficient_id'], request.form.get("function_name"))
                 if res:
                     del session['coefficient_id']
-                    return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']))
+                    return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']),
+                                           functions=get_data_function())
             else:
-                return render_template('section_abc', company_name=get_company_name_by_id(session['company_id']))
+                return render_template('section_abc.html', company_name=get_company_name_by_id(session['company_id']))
         else:
             return render_template('add_function.html', company_name=get_company_name_by_id(session['company_id']))
     else:
@@ -379,9 +383,9 @@ def documents():
 
 
 if __name__ == "__main__":
-    # drop_all()
-    # create_db()
-    # fill_db()
-    # test_inserts()
+    drop_all()
+    create_db()
+    fill_db()
+    test_inserts()
 
     app.run()
