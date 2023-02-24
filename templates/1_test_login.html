@@ -1,0 +1,11 @@
+{%extends "test_basic.html"%}
+
+{%block main%}
+<form name="test_log_form" method="POST" action="/test_login">
+    <h1>I'm -> /test_login</h1>
+    <h2>{{alert}}</h2>
+    <input name="test_login" type="text" placeholder="login">
+    <input name="test_password" type="text" placeholder="password">
+    <button type="submit" name="submit">log in</button>
+</form>
+{%endblock%}

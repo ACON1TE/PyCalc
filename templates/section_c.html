@@ -1,0 +1,57 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<h1>Раздел С: проектные задачи</h1>
+<h2>{{alert}}</h2>
+<div class="form">
+    <form name=“section_c_form” action="/section_c" method="POST">
+        <div class="container" style="display: flex; flex-direction:row">
+            <div class="different_parts">
+                <div class="inputs1" style="display: flex; flex-direction:row; border-style: solid;">
+                    <h3>б1</h3>
+                    <div class="title" style="display: flex; flex-direction:column">
+                        <label>Проект (КПЭ)</label>
+                        <input type="text" name="title1">
+                    </div>
+                    <div class="weight" style="display: flex; flex-direction:column">
+                        <label>Вес %</label>
+                        <div style="display: flex; flex-direction:row">
+                            <input type="number" name="weight1">
+                            <p>%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="inputs2" style="display: flex; flex-direction:row; border-style: solid; ">
+                    <h3>б2</h3>
+                    <div class="title" style="display: flex; flex-direction:column">
+                        <label>Проект (КПЭ)</label>
+                        <input type="text" name="title2">
+                    </div>
+                    <div class="weight" style="display: flex; flex-direction:column">
+                        <label>Вес %</label>
+                        <div style="display: flex; flex-direction:row">
+                            <input type="number" name="weight2">
+                            <p>%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="same_parts" style="display: flex; flex-direction:row;">
+                <div class="ranges" style="display: flex; flex-direction:column; border: solid;">
+                    <label>Диапазоны значений</label>
+                    <div style="display: flex; flex-direction:row">
+                        <p>от<input type="number" name="range_min" step="1">до<input type="number" name="range_max"
+                                                                                     step="1">баллов</p>
+                    </div>
+                </div>
+                <div class="coefs" style="display: flex; flex-direction:column; border: solid;">
+                    <label>Формула расчета</label>
+                    <p>Вес * Значение КПЭ /<input type="number" name="coef" step="1"></p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button name="submit" type="submit">Сохранить раздел</button>
+    </form>
+</div>
+{%endblock%}

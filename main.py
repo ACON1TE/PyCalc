@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 app.config.update(
     # SECRET_KEY = 'ахуенно секретный ключ',
-    SECRET_KEY='cookies1',
+    SECRET_KEY='cookies5',
 )
 
 LOGIN_ALERT: str = "Вхід в особистий кабінет"
@@ -141,17 +141,27 @@ def view_coefficients():
     if 'company_id' in session:
         if request.method == 'POST':
             function_id = int(request.form['function_id'])
-            return render_template('view_coefficients.html', function=coefs(get_coef(function_id)),
-                                   company_name=get_company_name_by_id(session['company_id']))
+            if function_id:
+                return render_template('view_coefficients.html', function=coefs(get_coef(function_id)),
+                                       company_name=get_company_name_by_id(session['company_id']))
+            else:
+                return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']))
     else:
         session['route'] = '/section_abc'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-@app.route('/view_positions', methods=['GET'])
+@app.route('/view_positions', methods=['GET', 'POST'])
 def view_positions():
-    return render_template('positions.html', company_name=get_company_name_by_id(session['company_id']),
-                           positions=get_all_positions(session['company_id']), functions=get_data_function())
+    if 'company_id' in session:
+        if request.method == 'GET':
+            return render_template('positions.html', company_name=get_company_name_by_id(session['company_id']),
+                                   positions=get_all_positions(session['company_id']), functions=get_data_function())
+        else:
+            return redirect('/add_position')
+    else:
+        session['route'] = '/view_positions'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 @app.route('/view_employees', methods=['GET'])
@@ -372,14 +382,22 @@ def log_out():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']),
-                           functions=get_data_function())
+    if 'company_id' in session:
+        return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']),
+                               functions=get_data_function())
+    else:
+        session['route'] = '/settings'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 @app.route('/documents', methods=['GET', 'POST'])
 def documents():
-    return render_template('documents.html', company_name=get_company_name_by_id(session['company_id']),
-                           positions=get_all_positions(session['company_id']))
+    if 'company_id' in session:
+        return render_template('documents.html', company_name=get_company_name_by_id(session['company_id']),
+                               positions=get_all_positions(session['company_id']))
+    else:
+        session['route'] = '/documents'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 if __name__ == "__main__":

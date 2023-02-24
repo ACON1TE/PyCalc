@@ -1,0 +1,295 @@
+{%extends "basic.html"%}
+
+{%block main%}
+<h1>Раздел А: количественные (измеряемые) КПЭ</h1>
+<h2>{{alert}}</h2>
+<div class="form">
+    <form name=“section_a_form” action="/section_a" method="POST">
+        <div class="inputs1" style="display: flex; flex-direction:row; border-style: solid;">
+            <h3>a1</h3>
+            <div class="title" style="display: flex; flex-direction:column">
+                <label>Цель</label>
+                <input type="text" name="title1">
+            </div>
+            <div class="weight" style="display: flex; flex-direction:column">
+                <label>Вес цели</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="weight1">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="ranges" style="display: flex; flex-direction:column">
+                <label>Диапазоны значений</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min1_1" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max1_1" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min1_2" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max1_2" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min1_3" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max1_3" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min1_4" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max1_4" step="0.01">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="coefs" style="display: flex; flex-direction:column">
+                <label>Коэффициенты для диапазонов</label>
+                <input type="number" name="coef1_1" step="0.01">
+                <input type="number" name="coef1_2" step="0.01">
+                <input type="number" name="coef1_3" step="0.01">
+                <input type="number" name="coef1_4" step="0.01">
+            </div>
+        </div>
+        <div class="inputs2" style="display: flex; flex-direction:row; border-style: solid;">
+            <h3>a2</h3>
+            <div class="title" style="display: flex; flex-direction:column">
+                <label>Цель</label>
+                <input type="text" name="title2">
+            </div>
+            <div class="weight" style="display: flex; flex-direction:column">
+                <label>Вес цели</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="weight2">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="ranges" style="display: flex; flex-direction:column">
+                <label>Диапазоны значений</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min2_1" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max2_1" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min2_2" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max2_2" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min2_3" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max2_3" step="0.01">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min2_4" step="0.01">
+                    <p>%</p>
+                    <input type="number" name="range_max2_4" step="0.01">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="coefs" style="display: flex; flex-direction:column">
+                <label>Коэффициенты для диапазонов</label>
+                <input type="number" name="coef2_1" step="0.01">
+                <input type="number" name="coef2_2" step="0.01">
+                <input type="number" name="coef2_3" step="0.01">
+                <input type="number" name="coef2_4" step="0.01">
+
+            </div>
+        </div>
+        <div class="inputs3" style="display: flex; flex-direction:row; border-style: solid;">
+            <h3>a3</h3>
+            <div class="title" style="display: flex; flex-direction:column">
+                <label>Цель</label>
+                <input type="text" name="title3">
+            </div>
+            <div class="weight" style="display: flex; flex-direction:column">
+                <label>Вес цели</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="weight3">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="ranges" style="display: flex; flex-direction:column">
+                <label>Диапазоны значений</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min3_1">
+                    <p>%</p>
+                    <input type="number" name="range_max3_1">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min3_2">
+                    <p>%</p>
+                    <input type="number" name="range_max3_2">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min3_3">
+                    <p>%</p>
+                    <input type="number" name="range_max3_3">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min3_4">
+                    <p>%</p>
+                    <input type="number" name="range_max3_4">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="coefs" style="display: flex; flex-direction:column">
+                <label>Коэффициенты для диапазонов</label>
+                <input type="number" name="coef3_1">
+                <input type="number" name="coef3_2">
+                <input type="number" name="coef3_3">
+                <input type="number" name="coef3_4">
+            </div>
+        </div>
+        <div class="inputs4" style="display: flex; flex-direction:row; border-style: solid;">
+            <h3>a4</h3>
+            <div class="title" style="display: flex; flex-direction:column">
+                <label>Цель</label>
+                <input type="text" name="title4">
+            </div>
+            <div class="weight" style="display: flex; flex-direction:column">
+                <label>Вес цели</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="weight4">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="ranges" style="display: flex; flex-direction:column">
+                <label>Диапазоны значений</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min4_1">
+                    <p>%</p>
+                    <input type="number" name="range_max4_1">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min4_2">
+                    <p>%</p>
+                    <input type="number" name="range_max4_2">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min4_3">
+                    <p>%</p>
+                    <input type="number" name="range_max4_3">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min4_4">
+                    <p>%</p>
+                    <input type="number" name="range_max4_4">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="coefs" style="display: flex; flex-direction:column">
+                <label>Коэффициенты для диапазонов</label>
+                <input type="number" name="coef4_1">
+                <input type="number" name="coef4_2">
+                <input type="number" name="coef4_3">
+                <input type="number" name="coef4_4">
+            </div>
+        </div>
+        <div class="inputs5" style="display: flex; flex-direction:row; border-style: solid;">
+            <h3>a5</h3>
+            <div class="title" style="display: flex; flex-direction:column">
+                <label>Цель</label>
+                <input type="text" name="title5">
+            </div>
+            <div class="weight" style="display: flex; flex-direction:column">
+                <label>Вес цели</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="weight5">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="ranges" style="display: flex; flex-direction:column">
+                <label>Диапазоны значений</label>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min5_1">
+                    <p>%</p>
+                    <input type="number" name="range_max5_1">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min5_2">
+                    <p>%</p>
+                    <input type="number" name="range_max5_2">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min5_3">
+                    <p>%</p>
+                    <input type="number" name="range_max5_3">
+                    <p>%</p>
+                </div>
+                <div style="display: flex; flex-direction:row">
+                    <input type="number" name="range_min5_4">
+                    <p>%</p>
+                    <input type="number" name="range_max5_4">
+                    <p>%</p>
+                </div>
+            </div>
+            <div class="coefs" style="display: flex; flex-direction:column">
+                <label>Коэффициенты для диапазонов</label>
+                <input type="number" name="coef5_1">
+                <input type="number" name="coef5_2">
+                <input type="number" name="coef5_3">
+                <input type="number" name="coef5_4">
+            </div>
+        </div>
+        <button name="submit" type="submit">Сохранить раздел</button>
+    </form>
+</div>
+{%endblock%}
+<!--
+крч я клянусь тебе inline-styles ставил не я, это все Светлов
+но честности ради, я попросил его криво-косо но ближе к тому как оно стоит в эксельке
+которую кинул Яценко. В общем уберешь их нахуй.
+По тегам можно менять что угодно как угодно и юзать любые классы.
+Тут 5 (ПЯТЬ) однотипных (ПОЧТИ) блока на 5 подразделов для первого раздела который 'Количественный'
+Каждый блок div c классами inputs[1-5] представляет из себя одну полную строку данных.
+На сам класс мне поебать. Сноси его нахуй.
+Еще мне поебать на все что внутри по тегам кроме input.
+А теперь душная логика
+1. Эти 3 хуйни должно быть внутри одного раздела одинаковое количество. Такая уж логика в нашей БД
+range_min[номер раздела]_[порядковый номер в ЭТОМ разделе]
+range_max[номер раздела]_[порядковый номер в ЭТОМ разделе]
+coef[номер раздела]_[порядковый номер в ЭТОМ разделе]
+2. Эти 3 ебатни будут правильно считываться на декораторе функции если будет правильно соблюдаться нумерация
+3. В этом страшном шаблоне нумерация ПРАВИЛЬНАЯ так что просто смотри по примеру.
+* если чет накосячить потом заебемся искать в какой конкретной точке косяк т.к. с бека я не смогу сказать номер строки в html
+где стоит не то название на input
+4. Вероятно (скорее всего) многие input по типу нужно будет сменить с text на number ибо я чувствую легкое жжение в жопе
+когда вижу какое-то число типа 35 в кавычках. Мы неплохо секономим время на вычислениях если не нужно будет менять типы данных
+на беке и числа получать сразу в типе данных чисел, а не как ебанные поемы для роботов
+5. В разных подразделах (cейчас они прекрасно выделены классами 'inputs' от вида которых ты, вероятно, ощущаешь странные смешанные
+чувства, такие как: скрежет зубов, низкий пульс, высокое артериальное давление и помутнение рассудка) может быть разное
+количество весов (range_min,range_max,coef). В каком то их 3 в каком то может быть хоть 10.
+6. Не ломай логику "парсера на бекенде" и он не будет ломать тебе жизнь. Я серьезно в инпутах ахуитительно важно соблюдать нумерацию
+именно так как я описал, но поскольку мы все конченные вот тебе еще раз:
+        title[ITER_MAIN]
+        weight[ITER_MAIN]
+        range_min[ITER_MAIN]_[ITER]
+        range_max[ITER_MAIN]_[ITER]
+        coef[ITER_MAIN]_[ITER]
+где:  ITER_MAIN - номер раздела
+      ITER - номер В разделе
+7. Я могу сделать функции для генерации кода (в т.ч. html со всеми классами и тегами) для всего раздела или какого-то подраздела
+или там что б появлялось не 3 строки весов а сделать их 4, но это бы работало НЕ ДИНАМИЧЕСКИ и требовало бы обновление всей страницы
+включая уже введеные данные так что скорее всего это прийдется делать на фронте. Повторюсь мне поебать на разметку и в чем стоят инпуты
+пока на них правильные имена.
+8. сумма по инпутах которые 'weight' не должна превышать 100
+9. range_min[x]_[y] не может быть меньше чем range_max[x]_[y-1]
+где X - номер подраздела, Y - номер подраздела
+10. endblock наверное не стоит убирать.
+11. я поставил метку на alert. Было бы круто туда какую то анимацию выпадающей хуеты или вроде того
+-->
