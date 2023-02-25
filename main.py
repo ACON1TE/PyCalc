@@ -22,8 +22,7 @@ LOGIN_ALERT: str = "Вхід в особистий кабінет"
 # стартовая страница, открывает форму для ввода логина и пароля, не имеет меню
 @app.route('/')
 def index():
-    message = "Вхід в особистий кабінет"
-    return render_template('index.html', mes=message)
+    return render_template('index.html', mes=LOGIN_ALERT)
 
 
 # страница входа получила данные т.е. ввели какой-то логин или пароль
@@ -158,6 +157,8 @@ def view_coefficients():
                                        company_name=get_company_name_by_id(session['company_id']))
             else:
                 return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']))
+        else:
+            return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']))
     else:
         session['route'] = '/view_coefficients'
         return render_template('index.html', mes=LOGIN_ALERT)
@@ -371,10 +372,11 @@ def show_report():
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-@app.route('/log_out', methods=['GET'])
+@app.route('/logout', methods=['GET'])
 def log_out():
     del session['company_id']
-    return render_template('index.html', mes=LOGIN_ALERT)
+    return redirect('/')
+    # return render_template('index.html', mes=LOGIN_ALERT)
 
 
 @app.route('/settings', methods=['GET', 'POST'])
