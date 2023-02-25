@@ -50,7 +50,8 @@ def auth():
 def home():
     return render_template('homepage.html', company_name=get_company_name_by_id(session['company_id']),
                            positions=get_all_positions(session['company_id']), functions=get_data_function(),
-                           employees=get_all_employees(session['company_id']))
+                           employees=get_all_employees(session['company_id']),
+                           reports=get_all_reports(session['company_id']))
 
 
 # страница для ввода данных о компании
@@ -388,15 +389,15 @@ def documents():
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
-@app.route('/download_file')
+@app.route('/download')
 def download_file():
-    return send_file('bullshit.csv')
+    return send_file('report.csv')
 
 
 if __name__ == "__main__":
-    # drop_all()
-    # create_db()
-    # fill_db()
-    # test_inserts()
+    drop_all()
+    create_db()
+    fill_db()
+    test_inserts()
 
     app.run()

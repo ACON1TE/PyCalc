@@ -518,6 +518,19 @@ def get_all_employees(company_id: int) -> list:
     return res
 
 
+# Возвращает список всех записей из таблицы reports
+def get_all_reports(company_id: int) -> list:
+    global SUPERUSER_ID
+    if company_id == SUPERUSER_ID:
+        cur.execute('SELECT * FROM reports')
+    else:
+        cur.execute(
+            f'SELECT * FROM reports WHERE company_id={company_id}')
+    res = cur.fetchall()
+    con.commit()
+    return res
+
+
 # Возвращает список всех записей из таблицы company
 def get_all_company() -> list:
     cur.execute('select * from company')
@@ -744,11 +757,21 @@ def calculate_report(report: object, coefs: object, position_id: int, company_id
                       4)
         bonuses_c_coef_list.append(count)
     calc = calculated_report(bonuses_sum_list, bonuses_a_coef_list, bonuses_b_coef_list, bonuses_c_coef_list)
-    with open('bullshit.csv', mode='w', newline='') as report_file:
+    # generating csv file
+    filename = "report.csv"
+    with open(filename, mode='w', newline='') as report_file:
         report_writer = csv.writer(report_file)
         report_writer.writerow(
-            ['Bonuses Sum List', 'Bonuses A Coef List', 'Bonuses B Coef List', 'Bonuses C Coef List'])
-        report_writer.writerow(bonuses_sum_list + bonuses_a_coef_list + bonuses_b_coef_list + bonuses_c_coef_list)
+            ['Розмір бази премії по розділам (А,Б,С)', 'Значення коефіцієнтів розділу А',
+             'Значення коефіцієнтів розділу Б', 'Значення коефіцієнтів розділу С'])
+        for i in range(len(bonuses_a_coef_list)):
+            row = list()
+            row.append(bonuses_sum_list[i] if i < len(bonuses_sum_list) else "")
+            row.append(bonuses_a_coef_list[i] if i < len(bonuses_a_coef_list) else "")
+            row.append(bonuses_b_coef_list[i] if i < len(bonuses_b_coef_list) else "")
+            row.append(bonuses_c_coef_list[i] if i < len(bonuses_c_coef_list) else "")
+            report_writer.writerow(row)
+
     return create_report(report, calc, position_id, company_id)
 
 
