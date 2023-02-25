@@ -283,7 +283,7 @@ def section_abc():
 
 
 @app.route('/add_function', methods=['GET', 'POST'])
-def add_function():
+def add_new_function():
     if 'company_id' in session:
         if request.method == 'POST':
             if 'coefficient_id' in session:
