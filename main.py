@@ -257,7 +257,7 @@ def section_abc():
             if result:
                 session['coefficient_id'] = result[0]
                 alert = "Запись добавлена! Укажите название функции"
-                return render_template('add_function.html', alert=alert)
+                return render_template('add_function.html', alert=alert, company_name=get_company_name_by_id(session['company_id']))
             else:
                 alert = "Ошибка"
                 return render_template('section_abc.html', alert=alert)
