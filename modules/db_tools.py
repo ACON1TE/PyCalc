@@ -5,7 +5,6 @@ con -> менять под себя
 """
 
 import psycopg2
-import random
 import csv
 from modules.interfaces import *
 
@@ -177,268 +176,7 @@ def create_db() -> None:
     print("Таблица 'employee' создана")
 
 
-def fill_company_data(companies_num: int) -> None:
-    companies = []
-    for i in range(companies_num):
-        name = f"Company {i + 1}"
-        login = f"company{i + 1}_login"
-        password = f"company{i + 1}_password"
-        companies.append((name, login, password))
-    for company in companies:
-        cur.execute(
-            f"INSERT INTO company (name, login, password) VALUES ('{company[0]}', '{company[1]}', '{company[2]}')")
-    con.commit()
-
-
-def fill_coefficients_data(count) -> None:
-    for kek in range(count):
-        coefs_abc_weight = [0.3, 0.35, 0.35]
-        coef_a_names = ['coef_a_names1', 'coef_a_names2', 'coef_a_names3', 'coef_a_names4']
-        coef_b_names = ['coef_b_names1', 'coef_b_names2', 'coef_b_names3']
-        coef_c_names = ['coef_c_names1', 'coef_c_names2', 'coef_c_names3']
-        # Весы для каждой записи
-        a, b, c = random.randint(10, int(100 / len(coef_b_names))), random.randint(10, int(100 / len(
-            coef_b_names))), random.randint(10, int(100 / len(coef_b_names)))
-        coef_a_name_weight = [a, b, c, 100 - (a + b + c)]
-        a, b, c = random.randint(10, int(100 / len(coef_b_names))), random.randint(10, int(100 / len(
-            coef_b_names))), random.randint(10, int(100 / len(coef_b_names)))
-        coef_b_name_weight = [a, b, 100 - (a + b)]
-        a, b, c = random.randint(10, int(100 / len(coef_b_names))), random.randint(10, int(100 / len(
-            coef_b_names))), random.randint(10, int(100 / len(coef_b_names)))
-        coef_c_name_weight = [a, b, 100 - (a + b)]
-        # Диапазоны значений и коэффы для них
-        coef_a_bottom_all_values = list()
-        coef_a_top_all_values = list()
-        coef_a_all_weights = list()
-        for i in range(len(coef_a_names)):
-            # count = random.randint(3, 5)
-            count = 4
-            coef_a_bottom_value = [0]
-            coef_a_top_value = [round(random.uniform(0, 1 / count), 2)]
-            coef_a_weight = [0]
-            for x in range(1, count):
-                coef_a_bottom_value.append(round(coef_a_top_value[x - 1] + 0.01, 2))
-
-                coef_a_top_value.append(round(coef_a_bottom_value[x] + random.uniform(0.01, 1 / count), 2))
-
-                coef_a_weight.append(round(coef_a_weight[x - 1] + random.uniform(0, 0.9), 2))
-            coef_a_bottom_value[0] = 0
-            coef_a_top_value[count - 1] = 1.5
-
-            coef_a_bottom_all_values.append(coef_a_bottom_value)
-            coef_a_top_all_values.append(coef_a_top_value)
-            coef_a_all_weights.append(coef_a_weight)
-
-        coef_b_bottom_value = 1
-        coef_b_top_value = 3
-        coef_b_weight = random.randint(1, 4)
-
-        coef_c_bottom_value = 1
-        coef_c_top_value = 3
-        coef_c_weight = random.randint(1, 4)
-        cur.execute(f"INSERT INTO coefficients(coefs_abc_weight, "
-                    f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
-                    f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
-                    f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
-                    f"VALUES(ARRAY{coefs_abc_weight},"
-                    f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
-                    f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
-                    f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
-        con.commit()
-
-
-def fill_functions_data(functions_num: int) -> None:
-    cur.execute(f"SELECT coefficients_id FROM coefficients")
-    coefficients_id_list = cur.fetchall()
-    for i in range(functions_num):
-        name = random.choice(['function1', 'function2', 'function3', 'function4', 'function5'])
-        coefficients_id = random.choice(coefficients_id_list)[0]
-        cur.execute(f"INSERT INTO functions(coefficients_id, name) VALUES({coefficients_id}, '{name}')")
-        con.commit()
-
-
-def fill_positions_data(positions_num: int) -> None:
-    cur.execute(f"SELECT * FROM functions")
-    function_ids = cur.fetchall()
-    position_names = ['Manager', 'Designer', 'Master', 'Back-end Developer', 'Worker', 'Logist', 'Front-end Developer',
-                      'Cleaning', 'Art-Director',
-                      'Accountant', 'Driver', 'Waiter', 'Bartender', 'Courier', 'Dispatcher']
-    cur.execute(f"SELECT company_id FROM company")
-    company_id_list = cur.fetchall()
-
-    for i in range(positions_num):
-        company_id = random.choice(company_id_list)[0]
-        position_name = position_names[i]
-        salary = round(random.uniform(12.31, 5023.425), 2)
-        cur.execute(
-            f"INSERT INTO positions (functions_id, position_name, salary, company_id) VALUES ({function_ids[random.randint(0, len(function_ids) - 1)][0]}, '{position_name}', '{salary}', {company_id})")
-    con.commit()
-
-
-def fill_employee_data(employees_num: int) -> None:
-    cur.execute(f"SELECT position_id FROM positions")
-    position_id_list = cur.fetchall()
-    cur.execute(f"SELECT function_id FROM functions")
-    function_id_list = cur.fetchall()
-    name_list = ['Yan', 'Novak', 'Anna', 'Maria', 'Sophia', 'Katherine', 'Eva', 'Diana', 'Nika', 'Yato', 'Denis',
-                 'Nixat',
-                 'Sasa', 'Kosta', 'Sevcov', 'Mazelov', 'Xesus']
-    for i in range(employees_num):
-        position_id = random.choice(position_id_list)[0]
-        function_id = random.choice(function_id_list)[0]
-        name = random.choice(name_list)[0]
-        email = random.choice(name)[0] + '@gmail.com'
-        phone = random.randint(103163296, 134215783)
-        phone = "+380" + str(phone)
-        # profile_image_url = 'https://093241'
-        cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
-                    f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
-        con.commit()
-
-
-# заполняет все таблицы рандомно сгенерированными значениями
-def fill_db(COMPANY_NUM=7,
-            COEF_FUNC_COUNT=3,
-            POSITIONS_NUM=15,
-            EMPLOYEE_NUM=51) -> None:
-    fill_company_data(COMPANY_NUM)
-    fill_coefficients_data(COEF_FUNC_COUNT)
-    fill_functions_data(COEF_FUNC_COUNT)
-    fill_positions_data(POSITIONS_NUM)
-    fill_employee_data(EMPLOYEE_NUM)
-
-    print("Таблицы заполнены данными")
-
-
-# удаляет и создает таблицу company + добавляет в нее запись (1, 'тестовое имя', 'root', 'root')
-def test_table() -> None:
-    print("Запущена функция test_table()")
-    cur.execute('DROP TABLE company')
-    cur.execute('''CREATE TABLE  company  
-         (company_id SERIAL PRIMARY KEY NOT NULL ,
-         name TEXT,
-         login TEXT NOT NULL,
-         password TEXT NOT NULL);''')
-    print("Таблица создана")
-    con.commit()
-
-    cur.execute(
-        "INSERT INTO company (name,login,password) VALUES ('тестовое имя', 'root', 'root')"
-    )
-    con.commit()
-    print("Тестовая запись добавлена")
-
-
-# заполняет часть таблицы всеми значениями из раздела А
-def insert_coefs_a(titles: list, weights: list, ranges_min: list, ranges_max: list, coefs: list) -> int:
-    test_only = [0.35, 0.35, 0.3]  # coefs_abc_weight
-    try:
-        cur.execute(
-            f"INSERT INTO coefficients(coef_a_names,coefs_abc_weight,coef_a_name_weight,coef_a_bottom_value,"
-            f"coef_a_top_value,coef_a_weight) VALUES(ARRAY{titles},ARRAY{test_only},ARRAY{weights},ARRAY{ranges_min},"
-            f"ARRAY{ranges_max},ARRAY{coefs})")
-        con.commit()
-        print("ok")
-        return 1
-    except:
-        con.commit()
-        return 0
-
-
-# заполняет часть таблицы всеми значениями из раздела Б и С
-def insert_coefs(section: str, titles: list, weights: list, range_min: int, range_max: int, coef: int) -> int:
-    if section == "b":
-        try:
-            cur.execute(
-                f"INSERT INTO coefficients(coef_b_names,coef_b_name_weight,coef_b_bottom_value,coef_b_top_value,"
-                f"coef_b_weight) VALUES(ARRAY{titles},ARRAY{weights},{range_min},{range_max},{coef})")
-            con.commit()
-            print("ok")
-            return 1
-        except:
-            con.commit()
-            return 0
-    elif section == "c":
-        try:
-            cur.execute(
-                f"INSERT INTO coefficients(coef_c_names,coef_c_name_weight,coef_c_bottom_value,coef_c_top_value,"
-                f"coef_c_weight) VALUES(ARRAY{titles},ARRAY{weights},{range_min},{range_max},{coef})")
-            con.commit()
-            print("ok")
-            return 1
-        except:
-            con.commit()
-            return 0
-    else:
-        print("Wrong section letter!")
-
-
-# Возвращает список объектов раздела А из таблицы coefficients для вывода в таблицу
-def get_coefficients_a(coefficients_id: int) -> list:
-    cur.execute(
-        f"SELECT coef_a_names,coef_a_name_weight,coef_a_bottom_value,coef_a_top_value,coef_a_weight FROM coefficients "
-        f"WHERE coefficients_id={coefficients_id} ")
-    res = cur.fetchone()
-    coef_a_names: list = res[0]
-    coef_a_name_weight: list = res[1]
-    coef_a_bottom_value: list = res[2]
-    coef_a_top_value: list = res[3]
-    coef_a_weight: list = res[4]
-    section_a_targets: list = list()
-    for i in range(len(coef_a_names)):
-        section_a_targets.append(
-            TargetFirstType(coef_a_names[i], coef_a_name_weight[i], coef_a_bottom_value[i], coef_a_top_value[i],
-                            coef_a_weight[i]))
-    con.commit()
-    return section_a_targets
-
-
-# Возвращает список объектов раздела Б из таблицы coefficients для вывода в таблицу
-def get_coefficients_b(coefficients_id: int) -> list:
-    cur.execute(
-        f"SELECT coef_b_names,coef_b_name_weight,coef_b_bottom_value,coef_b_top_value,coef_b_weight FROM coefficients "
-        f"WHERE coefficients_id={coefficients_id} ")
-    res = cur.fetchone()
-    coef_b_names: list = res[0]
-    coef_b_name_weight: list = res[1]
-    coef_b_bottom_value: int = res[2]
-    coef_b_top_value: int = res[3]
-    coef_b_weight: int = res[4]
-    section_b_targets: list = list()
-    for i in range(len(coef_b_names)):
-        section_b_targets.append(
-            TargetSecondType(coef_b_names[i], coef_b_name_weight[i], coef_b_bottom_value, coef_b_top_value,
-                             coef_b_weight))
-    con.commit()
-    return section_b_targets
-
-
-# Возвращает список объектов раздела С из таблицы coefficients для вывода в таблицу
-def get_coefficients_c(coefficients_id: int) -> list:
-    cur.execute(
-        f"SELECT coef_c_names,coef_c_name_weight,coef_c_bottom_value,coef_c_top_value,coef_c_weight FROM coefficients "
-        f"WHERE coefficients_id={coefficients_id} ")
-    res = cur.fetchone()
-    coef_c_names: list = res[0]
-    coef_c_name_weight: list = res[1]
-    coef_c_bottom_value: int = res[2]
-    coef_c_top_value: int = res[3]
-    coef_c_weight: int = res[4]
-    section_c_targets: list = list()
-    for i in range(len(coef_c_names)):
-        section_c_targets.append(
-            TargetSecondType(coef_c_names[i], coef_c_name_weight[i], coef_c_bottom_value, coef_c_top_value,
-                             coef_c_weight))
-    con.commit()
-    return section_c_targets
-
-
-# Возвращает ид функции, которая привязана к должности, если все прошло успешно, в противном случае - False
-def get_function_id_by_position_id(position_id: int) -> int | bool:
-    cur.execute(f"SELECT functions_id FROM positions WHERE position_id={position_id}")
-    res = cur.fetchone()
-    return res[0] if res is not None else False
-
+# ----- Методы для добавления данных в бд -----
 
 # Добавляет одну запись в таблицу company, возвращает: True - если прошло успешно, в противном случае - False
 def add_company(name: str, login: str, password: str) -> bool:
@@ -474,6 +212,59 @@ def add_employee(name: str, email: str, phone: str, position_id: int, function_i
     except:
         con.commit()
         return False
+
+
+# Добавляет одну запись в таблицу function, возвращает: True - если прошло успешно, в противном случае - False
+def add_function(coefficients_id: int, name: str) -> bool:
+    try:
+        cur.execute(f"INSERT INTO functions(coefficients_id, name) values({coefficients_id},'{name}')")
+        con.commit()
+        return True
+    except:
+        con.commit()
+        return False
+
+
+def coef_abc_add(coefs_abc_weight: list,
+                 coef_a_names,
+                 coef_a_name_weight,
+                 coef_a_bottom_all_values,
+                 coef_a_top_all_values,
+                 coef_a_all_weights,
+                 coef_b_names,
+                 coef_b_name_weight,
+                 coef_b_bottom_value,
+                 coef_b_top_value,
+                 coef_b_weight,
+                 coef_c_names,
+                 coef_c_name_weight,
+                 coef_c_bottom_value,
+                 coef_c_top_value,
+                 coef_c_weight):
+    try:
+        cur.execute(f"INSERT INTO coefficients(coefs_abc_weight, "
+                    f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
+                    f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
+                    f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
+                    f"VALUES(ARRAY{coefs_abc_weight},"
+                    f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
+                    f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
+                    f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
+        con.commit()
+        cur.execute("SELECT * FROM coefficients ORDER BY coefficients_id DESC LIMIT 1;")
+        return cur.fetchone()
+    except:
+        con.commit()
+        return False
+
+
+# ----- Методы для получения данных из бд -----
+
+# Возвращает ид функции, которая привязана к должности, если все прошло успешно, в противном случае - False
+def get_function_id_by_position_id(position_id: int) -> int | bool:
+    cur.execute(f"SELECT functions_id FROM positions WHERE position_id={position_id}")
+    res = cur.fetchone()
+    return res[0] if res is not None else False
 
 
 # Возвращает список всех записей из таблицы positions
@@ -547,39 +338,6 @@ def get_company(login: str, password: str) -> list | bool:
     return res if res != None else False
 
 
-def coef_abc_add(coefs_abc_weight: list,
-                 coef_a_names,
-                 coef_a_name_weight,
-                 coef_a_bottom_all_values,
-                 coef_a_top_all_values,
-                 coef_a_all_weights,
-                 coef_b_names,
-                 coef_b_name_weight,
-                 coef_b_bottom_value,
-                 coef_b_top_value,
-                 coef_b_weight,
-                 coef_c_names,
-                 coef_c_name_weight,
-                 coef_c_bottom_value,
-                 coef_c_top_value,
-                 coef_c_weight):
-    try:
-        cur.execute(f"INSERT INTO coefficients(coefs_abc_weight, "
-                    f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
-                    f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
-                    f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
-                    f"VALUES(ARRAY{coefs_abc_weight},"
-                    f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
-                    f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
-                    f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
-        con.commit()
-        cur.execute("SELECT * FROM coefficients ORDER BY coefficients_id DESC LIMIT 1;")
-        return cur.fetchone()
-    except:
-        con.commit()
-        return False
-
-
 def get_coef_id(function_id):
     cur.execute(f"select coefficients_id from functions where function_id = {function_id}")
     res = cur.fetchone()[0]
@@ -594,116 +352,12 @@ def get_coef(function_id):
     return res
 
 
-def add_function_sql(coefficients_id, name):
-    try:
-        cur.execute(f"INSERT INTO functions(coefficients_id, name) values({coefficients_id},'{name}')")
-        con.commit()
-        return True
-    except:
-        con.commit()
-        return False
-
-
 def get_company_name_by_id(id: int) -> str:
     cur.execute(f'select name from company where company_id={id}')
     return cur.fetchone()[0]
 
 
-# Создание суперюзера с id 100
-def create_superuser():
-    global SUPERUSER_ID
-    company_id = SUPERUSER_ID
-    cur.execute(f"insert into company(company_id,name,login,password) values({company_id},'ASH inc.', 'root','root')")
-    con.commit()
-
-
-# Ручное заполнение таблиц coefficients, positions, employee
-def test_coeffs():
-    global SUPERUSER_ID
-    coefficients_id = SUPERUSER_ID
-    coefs_abc_weight = [0.3, 0.3, 0.4]
-    coef_a_names = ['Выполнение плана продаж', 'Выполнение плана по прибыли',
-                    'Контроль общехозяйственных и операционных расходов',
-                    'Оборачиваемость по дебиторской задолженности']
-    coef_a_name_weight = [25, 15, 30, 30]
-    coef_a_bottom_all_values = [[0, 0.25, 0.60, 0.75], [0, 0.33, 0.70, 0.9], [0, 0.4, 0.9, 1], [0, 0.5, 0.7, 1]]
-    coef_a_top_all_values = [[0.24, 0.59, 0.74, 1.2], [0.32, 0.69, 0.89, 1.1], [0.39, 0.89, 0.99, 1.5],
-                             [0.49, 0.69, 0.99, 1.2]]
-    coef_a_all_weights = [[0, 0.3, 0.55, 0.9], [0, 0.5, 0.75, 1], [0, 0.45, 0.6, 1.2], [0, 0.25, 0.8, 1.1]]
-    coef_b_names = ['Ведение достоверного и своевременного финансового учета и отчетности',
-                    'Планирование и организация работы', 'Быстрое обрабатывание заказов']
-    coef_b_name_weight = [30, 25, 45]
-    coef_b_bottom_value = 1
-    coef_b_top_value = 3
-    coef_b_weight = 3
-    coef_c_names = ['Запуск продаж икорной продукции', 'Запуск личного бренда одежды',
-                    'Запуск производства ядерки в Украине']
-    coef_c_name_weight = [25, 65, 10]
-    coef_c_bottom_value = 1
-    coef_c_top_value = 3
-    coef_c_weight = 3
-    cur.execute(f"INSERT INTO coefficients(coefficients_id, coefs_abc_weight, "
-                f"coef_a_names, coef_a_name_weight, coef_a_bottom_value, coef_a_top_value, coef_a_weight, "
-                f"coef_b_names, coef_b_name_weight, coef_b_bottom_value, coef_b_top_value, coef_b_weight, "
-                f"coef_c_names,coef_c_name_weight, coef_c_bottom_value, coef_c_top_value, coef_c_weight) "
-                f"VALUES({coefficients_id},ARRAY{coefs_abc_weight},"
-                f"ARRAY{coef_a_names},ARRAY{coef_a_name_weight},ARRAY{coef_a_bottom_all_values}, ARRAY{coef_a_top_all_values},ARRAY{coef_a_all_weights},"
-                f"ARRAY{coef_b_names},ARRAY{coef_b_name_weight}, {coef_b_bottom_value}, {coef_b_top_value}, {coef_b_weight},"
-                f"ARRAY{coef_c_names},ARRAY{coef_c_name_weight}, {coef_c_bottom_value}, {coef_c_top_value}, {coef_c_weight})")
-    con.commit()
-
-
-def test_function():
-    global SUPERUSER_ID
-    function_id = SUPERUSER_ID
-    coefficients_id = SUPERUSER_ID
-    name = 'Кипсолид'
-    cur.execute(
-        f"INSERT INTO functions(function_id, coefficients_id, name) VALUES({function_id},{coefficients_id}, '{name}')")
-    con.commit()
-
-
-def test_position():
-    global SUPERUSER_ID
-    position_id = SUPERUSER_ID
-    functions_id = SUPERUSER_ID
-    position_name = 'Управляющий отделом маркетинга'
-    salary = 1250.0
-    company_id = SUPERUSER_ID
-    cur.execute(
-        f"INSERT INTO positions (position_id, functions_id, position_name, salary, company_id) VALUES ({position_id},{functions_id}, '{position_name}', {salary}, {company_id})")
-    con.commit()
-
-
-def test_employee():
-    global SUPERUSER_ID
-    name = 'Степан Бандера'
-    email = 'bandera@gmail.com'
-    phone = '+380999999999'
-    position_id = SUPERUSER_ID
-    function_id = SUPERUSER_ID
-    cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
-                f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
-    con.commit()
-    name = 'Симон Петлюра'
-    email = 'petliura@gmail.com'
-    phone = '+3806777777777'
-    position_id = SUPERUSER_ID
-    function_id = SUPERUSER_ID
-    cur.execute(f"INSERT INTO employee (name, email, phone, position_id, function_id) VALUES "
-                f"('{name}', '{email}', '{phone}', {position_id}, '{function_id}')")
-    con.commit()
-
-
-def test_inserts():
-    create_superuser()
-    # test_coeffs()
-    # test_function()
-    # test_position()
-    # test_employee()
-
-
-def calculate_report(report: object, coefs: object, position_id: int, company_id: int) -> object | str:
+def calculate_report(report: report, coefs: coefs, position_id: int, company_id: int) -> object | str:
     budget_diff = report.budget_plan - report.budget_spend
     if budget_diff < 0:
         return f"Бюджет перерасходован. Премии невозможны. Сумма нестачи бюджета - {budget_diff}"
@@ -775,7 +429,7 @@ def calculate_report(report: object, coefs: object, position_id: int, company_id
     return create_report(report, calc, position_id, company_id)
 
 
-def create_report(report: object, calculated_report: object, position_id: int, company_id: int) -> int:
+def create_report(report: report, calculated_report: calculated_report, position_id: int, company_id: int) -> int:
     cur.execute(f'select position_name from positions where position_id={position_id}')
     # position_id = session['position_id']
     # company_id = session['company_id']

@@ -6,105 +6,102 @@
 
 {%block aside%}
 <aside class="dashboard__aside">
-    <a href="/home" class="logo dashboard__logo">
-        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
-    </a>
-    <a href="#" class="dashboard__profile">{{company_name}}</a>
-    <nav class="dashboard__nav">
-        <ul class="dashboard__list">
-            <li class="dashboard__list-item">
-                <a href="/home" class="dashboard__link">
-                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
-                    <span class="dashboard__link-text">Головна</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_positions" class="dashboard__link">
-                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Посади</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_employees" class="dashboard__link dashboard__link--active">
-                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Працівники</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/documents" class="dashboard__link">
-                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Документи</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/settings" class="dashboard__link">
-                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Налаштування</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+  <a href="/home" class="logo dashboard__logo">
+    <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype" />
+  </a>
+  <a href="#" class="dashboard__profile">{{company_name}}</a>
+  <nav class="dashboard__nav">
+    <ul class="dashboard__list">
+      <li class="dashboard__list-item">
+        <a href="/home" class="dashboard__link">
+          <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt="" />
+          <span class="dashboard__link-text">Головна</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_positions" class="dashboard__link">
+          <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Посади</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_employees" class="dashboard__link dashboard__link--active">
+          <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Працівники</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/documents" class="dashboard__link">
+          <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Документи</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/settings" class="dashboard__link">
+          <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Налаштування</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
 </aside>
 {%endblock%}
 
 {%block content%}
 <div class="employees dashboard__employees">
-    <h1 class="employees__title">Працівники</h1>
-    <div class="employees__wrapper">
-        <div class="employees__search">
-            <form action="#" method="GET" class="employees__search-form">
-                <input type="text" class="employees__search-input" placeholder="Пошук"/>
-            </form>
-        </div>
-        <!-- /.employees__search -->
-        <a href="/add_employee" class="employees__link">
-            <img
-                    src="../static/images/icons/addEmployee.svg"
-                    alt="Додати нового працівника"
-                    class="employees__icon"
-            />
+  <h1 class="employees__title">Працівники</h1>
+  <div class="employees__wrapper">
+    <div class="employees__search">
+      <form action="#" method="GET" class="employees__search-form">
+        <input type="text" class="employees__search-input" placeholder="Пошук" />
+      </form>
+    </div>
+    <!-- /.employees__search -->
+    <a href="/add_employee" class="employees__link">
+      <img src="../static/images/icons/addEmployee.svg" alt="Додати нового працівника" class="employees__icon" />
+    </a>
+  </div>
+  <!-- /.employees__wrapper -->
+  <div class="employees__cards">
+    {%for employee in employees%}
+    <div class="employees__item">
+      <div class="employees__row">
+        <span class="employees__item-text">{{employee[0]}}</span>
+        <span class="employees__item-text">
+          Оклад
+          <span class="employees__value">{{employee[1]}}</span>
+        </span>
+        <span class="employees__item-text">
+          Посада
+          <span class="employees__value">{{employee[4]}}</span>
+        </span>
+        <a href="#" class="employees__switcher">
+          <span class="employees__switcher-item"></span>
+          <span class="employees__switcher-item"></span>
         </a>
+      </div>
+      <!-- /.employees__row -->
+      <div class="employees__row employees__accordion employees__row--hidden">
+        <span class="employees__item-text">
+          Премія за формулою
+          <span class="employees__value">{{employee[5]}}</span>
+        </span>
+        <span class="employees__item-text">
+          Номер телефону
+          <span class="employees__value">{{employee[3]}}</span>
+        </span>
+        <span class="employees__item-text">
+          Email
+          <span class="employees__value">{{employee[2]}}</span>
+        </span>
+      </div>
+      <!-- /.employees__row -->
     </div>
-    <!-- /.employees__wrapper -->
-    <div class="employees__cards">
-        {%for employee in employees%}
-        <div class="employees__item">
-            <div class="employees__row">
-                <span class="employees__item-text">{{employee[0]}}</span>
-                <span class="employees__item-text">
-                    Оклад
-                    <span class="employees__value">{{employee[1]}}</span>
-                  </span>
-                <span class="employees__item-text">
-                    Посада
-                    <span class="employees__value">{{employee[4]}}</span>
-                  </span>
-                <a href="#" class="employees__switcher">
-                    <span class="employees__switcher-item"></span>
-                    <span class="employees__switcher-item"></span>
-                </a>
-            </div>
-            <!-- /.employees__row -->
-            <div class="employees__row employees__accordion employees__row--hidden">
-                  <span class="employees__item-text">
-                    Премія за формулою
-                    <span class="employees__value">{{employee[5]}}</span>
-                  </span>
-                  <span class="employees__item-text">
-                    Номер телефону
-                    <span class="employees__value">{{employee[3]}}</span>
-                  </span>
-                <span class="employees__item-text">
-                    Email
-                    <span class="employees__value">{{employee[2]}}</span>
-                  </span>
-            </div>
-            <!-- /.employees__row -->
-        </div>
-        <!-- /.employees__item -->
-        {%endfor%}
-    </div>
-    <!-- /.employees__cards -->
+    <!-- /.employees__item -->
+    {%endfor%}
+  </div>
+  <!-- /.employees__cards -->
 </div>
 <!-- /.employees -->
 {%endblock%}
@@ -113,4 +110,3 @@
 <script src="../static/js/preloader.js"></script>
 <script src="../static/js/dashboard/employee.js"></script>
 {%endblock%}
-

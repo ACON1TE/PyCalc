@@ -6,442 +6,400 @@
 
 {%block aside%}
 <aside class="dashboard__aside">
-    <a href="/home" class="logo dashboard__logo">
-        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
-    </a>
-    <a href="#" class="dashboard__profile">{{company_name}}</a>
-    <nav class="dashboard__nav">
-        <ul class="dashboard__list">
-            <li class="dashboard__list-item">
-                <a href="/home" class="dashboard__link">
-                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
-                    <span class="dashboard__link-text">Головна</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_positions" class="dashboard__link">
-                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Посади</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_employees" class="dashboard__link">
-                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Працівники</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/documents" class="dashboard__link">
-                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Документи</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/settings" class="dashboard__link">
-                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Налаштування</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+  <a href="/home" class="logo dashboard__logo">
+    <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype" />
+  </a>
+  <a href="#" class="dashboard__profile">{{company_name}}</a>
+  <nav class="dashboard__nav">
+    <ul class="dashboard__list">
+      <li class="dashboard__list-item">
+        <a href="/home" class="dashboard__link">
+          <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt="" />
+          <span class="dashboard__link-text">Головна</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_positions" class="dashboard__link">
+          <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Посади</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_employees" class="dashboard__link">
+          <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Працівники</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/documents" class="dashboard__link">
+          <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Документи</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/settings" class="dashboard__link">
+          <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Налаштування</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
 </aside>
 {%endblock%}
 
 {%block content%}
 <div class="sections dashboard__sections">
-    <form action="/section_abc" method="POST" class="sections__form" novalidate>
-        <section class="sections__item">
-            <h1 class="sections__item-title">Коефіцієнти розділів</h1>
-            <span class="sections__item-desc">
-                  Приймаються значення від 0 до 1.0. Використовуйте числа з плаваючою крапкою.
-                </span>
-            <div class="sections__card">
-                <div class="sections__card-aside">
-                    <span class="sections__card-section">К-ти</span>
-                </div>
-                <!-- /.sections__card-aside -->
-                <div class="sections__card-content">
-                    <label class="sections__label">
-                        Вага розділу А
-                        <input type="number" name="abc_weight1" step="0.01" class="sections__input" required/>
-                    </label>
-                    <label class="sections__label">
-                        Вага розділу B
-                        <input type="number" name="abc_weight2" step="0.01" class="sections__input" required/>
-                    </label>
-                    <label class="sections__label">
-                        Вага розділу C
-                        <input type="number" name="abc_weight3" step="0.01" class="sections__input" required/>
-                    </label>
-                </div>
-                <!-- /.sections__card-content -->
+  <form action="/section_abc" method="POST" class="sections__form" novalidate>
+    <section class="sections__item">
+      <h1 class="sections__item-title">Коефіцієнти розділів</h1>
+      <span class="sections__item-desc">
+        Приймаються значення від 0 до 1.0. Використовуйте числа з плаваючою крапкою.
+      </span>
+      <div class="sections__card">
+        <div class="sections__card-aside">
+          <span class="sections__card-section">К-ти</span>
+        </div>
+        <!-- /.sections__card-aside -->
+        <div class="sections__card-content">
+          <label class="sections__label">
+            Вага розділу А
+            <input type="number" name="abc_weight1" step="0.01" class="sections__input" required />
+          </label>
+          <label class="sections__label">
+            Вага розділу B
+            <input type="number" name="abc_weight2" step="0.01" class="sections__input" required />
+          </label>
+          <label class="sections__label">
+            Вага розділу C
+            <input type="number" name="abc_weight3" step="0.01" class="sections__input" required />
+          </label>
+        </div>
+        <!-- /.sections__card-content -->
+      </div>
+      <!-- /.sections__card -->
+    </section>
+    <section class="sections__item">
+      <h2 class="sections__item-title">Розділ А: кількісні (вимірюванні) КВЕ</h2>
+      <span class="sections__item-desc"> ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі. </span>
+      <div class="sections__card">
+        <div class="sections__card-aside">
+          <span class="sections__card-section">A1</span>
+        </div>
+        <!-- /.sections__card-aside -->
+        <div class="sections__card-content">
+          <label class="sections__label">
+            Ціль
+            <input type="text" name="title1_a" class="sections__input" required />
+          </label>
+          <label class="sections__label">
+            Вага**, %
+            <input type="number" name="weight1_a" step="0.01" class="sections__input" required />
+          </label>
+          <div class="sections__card-wrapper">
+            <div class="sections__card-titles">
+              <h3 class="sections__label">Діапазони значень, %</h3>
+              <h3 class="sections__label">Вага діапазону, число</h3>
             </div>
-            <!-- /.sections__card -->
-        </section>
-        <section class="sections__item">
-            <h2 class="sections__item-title">Розділ А: кількісні (вимірюванні) КВЕ</h2>
-            <span class="sections__item-desc">
-                  ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі.
-                </span>
-            <div class="sections__card">
-                <div class="sections__card-aside">
-                    <span class="sections__card-section">A1</span>
-                </div>
-                <!-- /.sections__card-aside -->
-                <div class="sections__card-content">
-                    <label class="sections__label">
-                        Ціль
-                        <input type="text" name="title1_a" class="sections__input" required/>
-                    </label>
-                    <label class="sections__label">
-                        Вага**, %
-                        <input type="number" name="weight1_a" step="0.01" class="sections__input" required/>
-                    </label>
-                    <div class="sections__card-wrapper">
-                        <div class="sections__card-titles">
-                            <h3 class="sections__label">Діапазони значень, %</h3>
-                            <h3 class="sections__label">Вага діапазону, число</h3>
-                        </div>
-                        <!-- /.sections__card-titles -->
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min1_1" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max1_1" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef1_1" class="sections__input" required/>
-                        </div>
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min1_2" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max1_2" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef1_2" class="sections__input" required/>
-                        </div>
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min1_3" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max1_3" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef1_3" class="sections__input" required/>
-                        </div>
-                    </div>
-                    <!-- /.sections__card-wrapper -->
-                </div>
-                <!-- /.sections__card-content -->
+            <!-- /.sections__card-titles -->
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min1_1" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max1_1" step="0.01" class="sections__input" required />
+              <input type="number" name="coef1_1" class="sections__input" required />
             </div>
-            <!-- /.sections__card -->
-            <div class="sections__card">
-                <div class="sections__card-aside">
-                    <span class="sections__card-section">A2</span>
-                </div>
-                <!-- /.sections__card-aside -->
-                <div class="sections__card-content">
-                    <label class="sections__label">
-                        Ціль
-                        <input type="text" name="title2_a" class="sections__input" required/>
-                    </label>
-                    <label class="sections__label">
-                        Вага**, %
-                        <input type="number" name="weight2_a" step="0.01" class="sections__input" required/>
-                    </label>
-                    <div class="sections__card-wrapper">
-                        <div class="sections__card-titles">
-                            <h3 class="sections__label">Діапазони значень, %</h3>
-                            <h3 class="sections__label">Вага діапазону, число</h3>
-                        </div>
-                        <!-- /.sections__card-titles -->
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min2_1" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max2_1" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef2_1" class="sections__input" required/>
-                        </div>
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min2_2" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max2_2" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef2_2" class="sections__input" required/>
-                        </div>
-                        <div class="sections__card-interactive">
-                            <input type="number" name="range_min2_3" step="0.01" class="sections__input" required/>
-                            <input type="number" name="range_max2_3" step="0.01" class="sections__input" required/>
-                            <input type="number" name="coef2_3" class="sections__input" required/>
-                        </div>
-                    </div>
-                    <!-- /.sections__card-wrapper -->
-                </div>
-                <!-- /.sections__card-content -->
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min1_2" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max1_2" step="0.01" class="sections__input" required />
+              <input type="number" name="coef1_2" class="sections__input" required />
             </div>
-            <!-- /.sections__card -->
-<!--            <div class="sections__card">-->
-<!--                <div class="sections__card-aside">-->
-<!--                    <span class="sections__card-section">A3</span>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
-<!--                <div class="sections__card-content">-->
-<!--                    <label class="sections__label">-->
-<!--                        Ціль-->
-<!--                        <input type="text" name="title3_a" class="sections__input" required/>-->
-<!--                    </label>-->
-<!--                    <label class="sections__label">-->
-<!--                        Вага**, %-->
-<!--                        <input type="number" name="weight3_a" step="0.01" class="sections__input" required/>-->
-<!--                    </label>-->
-<!--                    <div class="sections__card-wrapper">-->
-<!--                        <div class="sections__card-titles">-->
-<!--                            <h3 class="sections__label">Діапазони значень, %</h3>-->
-<!--                            <h3 class="sections__label">Вага діапазону, число</h3>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.sections__card-titles &ndash;&gt;-->
-<!--                        <div class="sections__card-interactive">-->
-<!--                            <input type="number" name="range_min3_1" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="range_max3_1" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="coef3_1" class="sections__input" required/>-->
-<!--                        </div>-->
-<!--                        <div class="sections__card-interactive">-->
-<!--                            <input type="number" name="range_min3_2" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="range_max3_2" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="coef3_2" class="sections__input" required/>-->
-<!--                        </div>-->
-<!--                        <div class="sections__card-interactive">-->
-<!--                            <input type="number" name="range_min3_3" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="range_max3_3" step="0.01" class="sections__input" required/>-->
-<!--                            <input type="number" name="coef3_3" class="sections__input" required/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; /.sections__card-wrapper &ndash;&gt;-->
-<!--                </div>-->
-<!--                &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
-<!--            </div>-->
-<!--            &lt;!&ndash; /.sections__card &ndash;&gt;-->
-        </section>
-        <section class="sections__item">
-            <h2 class="sections__item-title">Розділ Б: якісні (оцінювальні) КВЕ</h2>
-            <span class="sections__item-desc">
-                  ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі.
-                </span>
-            <div class="sections__divided">
-                <div class="sections__left">
-                    <div class="sections__card">
-                        <div class="sections__card-aside">
-                            <span class="sections__card-section">Б1</span>
-                        </div>
-                        <!-- /.sections__card-aside -->
-                        <div class="sections__card-content">
-                            <label class="sections__label">
-                                Ціль
-                                <input type="text" name="title1_b" class="sections__input" required/>
-                            </label>
-                            <label class="sections__label">
-                                Вага**, %
-                                <input type="number" name="weight1_b" step="0.01" class="sections__input" required/>
-                            </label>
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-                    <div class="sections__card">
-                        <div class="sections__card-aside">
-                            <span class="sections__card-section">Б2</span>
-                        </div>
-                        <!-- /.sections__card-aside -->
-                        <div class="sections__card-content">
-                            <label class="sections__label">
-                                Ціль
-                                <input type="text" name="title2_b" class="sections__input" required/>
-                            </label>
-                            <label class="sections__label">
-                                Вага**, %
-                                <input type="number" name="weight2_b" step="0.01" class="sections__input" required/>
-                            </label>
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-<!--                    <div class="sections__card">-->
-<!--                        <div class="sections__card-aside">-->
-<!--                            <span class="sections__card-section">Б3</span>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
-<!--                        <div class="sections__card-content">-->
-<!--                            <label class="sections__label">-->
-<!--                                Ціль-->
-<!--                                <input type="text" name="title3_b" class="sections__input" required/>-->
-<!--                            </label>-->
-<!--                            <label class="sections__label">-->
-<!--                                Вага**, %-->
-<!--                                <input type="number" name="weight3_b" step="0.01" class="sections__input" required/>-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
-<!--                    </div>-->
-                    <!-- /.sections__card -->
-                </div>
-                <!-- /.sections__left -->
-                <div class="sections__right">
-                    <div class="sections__card">
-                        <div class="sections__card-content">
-                            <div class="sections__card-wrapper">
-                                <div class="sections__card-interactive">
-                                    <div class="sections__card-block">
-                                        <h3 class="sections__label">Діапазони значень, числа</h3>
-                                        <div class="sections__wrapper">
-                                            <input
-                                                    type="number"
-                                                    name="range_min_b"
-                                                    step="1"
-                                                    class="sections__input"
-                                                    required
-
-                                            />
-                                            <input
-                                                    type="number"
-                                                    name="range_max_b"
-                                                    step="1"
-                                                    class="sections__input"
-                                                    required
-                                            />
-                                        </div>
-                                        <!-- /.sections__wrapper -->
-                                    </div>
-                                    <!-- /.sections__card-block -->
-                                    <div class="sections__card-block">
-                                        <h3 class="sections__label">Вага діапазону, число</h3>
-                                        <div class="sections__wrapper">
-                                            <input
-                                                    type="number"
-                                                    name="coef_b"
-                                                    step="0.01"
-                                                    class="sections__input"
-                                                    required
-                                            />
-                                        </div>
-                                        <!-- /.sections__wrapper -->
-                                    </div>
-                                    <!-- /.sections__card-block -->
-                                </div>
-                            </div>
-                            <!--  -->
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-                </div>
-                <!-- /.sections__right -->
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min1_3" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max1_3" step="0.01" class="sections__input" required />
+              <input type="number" name="coef1_3" class="sections__input" required />
             </div>
-            <!-- /.sections__divided -->
-        </section>
-        <section class="sections__item">
-            <h2 class="sections__item-title">Розділ С: проєктні задачі</h2>
-            <span class="sections__item-desc">
-                  ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі.
-                </span>
-            <div class="sections__divided">
-                <div class="sections__left">
-                    <div class="sections__card">
-                        <div class="sections__card-aside">
-                            <span class="sections__card-section">С1</span>
-                        </div>
-                        <!-- /.sections__card-aside -->
-                        <div class="sections__card-content">
-                            <label class="sections__label">
-                                Ціль
-                                <input type="text" name="title1_c" class="sections__input" required/>
-                            </label>
-                            <label class="sections__label">
-                                Вага**, %
-                                <input type="number" name="weight1_c" step="0.01" class="sections__input" required/>
-                            </label>
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-                    <div class="sections__card">
-                        <div class="sections__card-aside">
-                            <span class="sections__card-section">С2</span>
-                        </div>
-                        <!-- /.sections__card-aside -->
-                        <div class="sections__card-content">
-                            <label class="sections__label">
-                                Ціль
-                                <input type="text" name="title2_c" class="sections__input" required/>
-                            </label>
-                            <label class="sections__label">
-                                Вага**, %
-                                <input type="number" name="weight2_c" step="0.01" class="sections__input" required/>
-                            </label>
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-<!--                    <div class="sections__card">-->
-<!--                        <div class="sections__card-aside">-->
-<!--                            <span class="sections__card-section">С3</span>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
-<!--                        <div class="sections__card-content">-->
-<!--                            <label class="sections__label">-->
-<!--                                Ціль-->
-<!--                                <input type="text" name="title3_c" class="sections__input" required/>-->
-<!--                            </label>-->
-<!--                            <label class="sections__label">-->
-<!--                                Вага**, %-->
-<!--                                <input type="number" name="weight3_c" step="0.01" class="sections__input" required/>-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
-<!--                    </div>-->
-                    <!-- /.sections__card -->
-                </div>
-                <!-- /.sections__left -->
-                <div class="sections__right">
-                    <div class="sections__card">
-                        <div class="sections__card-content">
-                            <div class="sections__card-wrapper">
-                                <div class="sections__card-interactive">
-                                    <div class="sections__card-block">
-                                        <h3 class="sections__label">Діапазони значень, числа</h3>
-                                        <div class="sections__wrapper">
-                                            <input
-                                                    type="number"
-                                                    name="range_min_c"
-                                                    step="1"
-                                                    class="sections__input"
-                                                    required
-                                            />
-                                            <input
-                                                    type="number"
-                                                    name="range_max_c"
-                                                    step="1"
-                                                    class="sections__input"
-                                                    required
-                                            />
-                                        </div>
-                                        <!-- /.sections__wrapper -->
-                                    </div>
-                                    <!-- /.sections__card-block -->
-                                    <div class="sections__card-block">
-                                        <h3 class="sections__label">Вага діапазону, число</h3>
-                                        <div class="sections__wrapper">
-                                            <input
-                                                    type="number"
-                                                    name="coef_c"
-                                                    class="sections__input"
-                                                    required
-                                                    step="0.01"
-                                            />
-                                        </div>
-                                        <!-- /.sections__wrapper -->
-                                    </div>
-                                    <!-- /.sections__card-block -->
-                                </div>
-                            </div>
-                            <!--  -->
-                        </div>
-                        <!-- /.sections__card-content -->
-                    </div>
-                    <!-- /.sections__card -->
-                </div>
-                <!-- /.sections__right -->
+          </div>
+          <!-- /.sections__card-wrapper -->
+        </div>
+        <!-- /.sections__card-content -->
+      </div>
+      <!-- /.sections__card -->
+      <div class="sections__card">
+        <div class="sections__card-aside">
+          <span class="sections__card-section">A2</span>
+        </div>
+        <!-- /.sections__card-aside -->
+        <div class="sections__card-content">
+          <label class="sections__label">
+            Ціль
+            <input type="text" name="title2_a" class="sections__input" required />
+          </label>
+          <label class="sections__label">
+            Вага**, %
+            <input type="number" name="weight2_a" step="0.01" class="sections__input" required />
+          </label>
+          <div class="sections__card-wrapper">
+            <div class="sections__card-titles">
+              <h3 class="sections__label">Діапазони значень, %</h3>
+              <h3 class="sections__label">Вага діапазону, число</h3>
             </div>
-            <!-- /.sections__divided -->
-            <div class="link-wrapper">
-                <button type="submit" class="button sections__button button--primary">Зберегти формулу</button>
+            <!-- /.sections__card-titles -->
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min2_1" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max2_1" step="0.01" class="sections__input" required />
+              <input type="number" name="coef2_1" class="sections__input" required />
             </div>
-        </section>
-    </form>
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min2_2" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max2_2" step="0.01" class="sections__input" required />
+              <input type="number" name="coef2_2" class="sections__input" required />
+            </div>
+            <div class="sections__card-interactive">
+              <input type="number" name="range_min2_3" step="0.01" class="sections__input" required />
+              <input type="number" name="range_max2_3" step="0.01" class="sections__input" required />
+              <input type="number" name="coef2_3" class="sections__input" required />
+            </div>
+          </div>
+          <!-- /.sections__card-wrapper -->
+        </div>
+        <!-- /.sections__card-content -->
+      </div>
+      <!-- /.sections__card -->
+      <!--            <div class="sections__card">-->
+      <!--                <div class="sections__card-aside">-->
+      <!--                    <span class="sections__card-section">A3</span>-->
+      <!--                </div>-->
+      <!--                &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
+      <!--                <div class="sections__card-content">-->
+      <!--                    <label class="sections__label">-->
+      <!--                        Ціль-->
+      <!--                        <input type="text" name="title3_a" class="sections__input" required/>-->
+      <!--                    </label>-->
+      <!--                    <label class="sections__label">-->
+      <!--                        Вага**, %-->
+      <!--                        <input type="number" name="weight3_a" step="0.01" class="sections__input" required/>-->
+      <!--                    </label>-->
+      <!--                    <div class="sections__card-wrapper">-->
+      <!--                        <div class="sections__card-titles">-->
+      <!--                            <h3 class="sections__label">Діапазони значень, %</h3>-->
+      <!--                            <h3 class="sections__label">Вага діапазону, число</h3>-->
+      <!--                        </div>-->
+      <!--                        &lt;!&ndash; /.sections__card-titles &ndash;&gt;-->
+      <!--                        <div class="sections__card-interactive">-->
+      <!--                            <input type="number" name="range_min3_1" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="range_max3_1" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="coef3_1" class="sections__input" required/>-->
+      <!--                        </div>-->
+      <!--                        <div class="sections__card-interactive">-->
+      <!--                            <input type="number" name="range_min3_2" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="range_max3_2" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="coef3_2" class="sections__input" required/>-->
+      <!--                        </div>-->
+      <!--                        <div class="sections__card-interactive">-->
+      <!--                            <input type="number" name="range_min3_3" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="range_max3_3" step="0.01" class="sections__input" required/>-->
+      <!--                            <input type="number" name="coef3_3" class="sections__input" required/>-->
+      <!--                        </div>-->
+      <!--                    </div>-->
+      <!--                    &lt;!&ndash; /.sections__card-wrapper &ndash;&gt;-->
+      <!--                </div>-->
+      <!--                &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
+      <!--            </div>-->
+      <!--            &lt;!&ndash; /.sections__card &ndash;&gt;-->
+    </section>
+    <section class="sections__item">
+      <h2 class="sections__item-title">Розділ Б: якісні (оцінювальні) КВЕ</h2>
+      <span class="sections__item-desc"> ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі. </span>
+      <div class="sections__divided">
+        <div class="sections__left">
+          <div class="sections__card">
+            <div class="sections__card-aside">
+              <span class="sections__card-section">Б1</span>
+            </div>
+            <!-- /.sections__card-aside -->
+            <div class="sections__card-content">
+              <label class="sections__label">
+                Ціль
+                <input type="text" name="title1_b" class="sections__input" required />
+              </label>
+              <label class="sections__label">
+                Вага**, %
+                <input type="number" name="weight1_b" step="0.01" class="sections__input" required />
+              </label>
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+          <div class="sections__card">
+            <div class="sections__card-aside">
+              <span class="sections__card-section">Б2</span>
+            </div>
+            <!-- /.sections__card-aside -->
+            <div class="sections__card-content">
+              <label class="sections__label">
+                Ціль
+                <input type="text" name="title2_b" class="sections__input" required />
+              </label>
+              <label class="sections__label">
+                Вага**, %
+                <input type="number" name="weight2_b" step="0.01" class="sections__input" required />
+              </label>
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+          <!--                    <div class="sections__card">-->
+          <!--                        <div class="sections__card-aside">-->
+          <!--                            <span class="sections__card-section">Б3</span>-->
+          <!--                        </div>-->
+          <!--                        &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
+          <!--                        <div class="sections__card-content">-->
+          <!--                            <label class="sections__label">-->
+          <!--                                Ціль-->
+          <!--                                <input type="text" name="title3_b" class="sections__input" required/>-->
+          <!--                            </label>-->
+          <!--                            <label class="sections__label">-->
+          <!--                                Вага**, %-->
+          <!--                                <input type="number" name="weight3_b" step="0.01" class="sections__input" required/>-->
+          <!--                            </label>-->
+          <!--                        </div>-->
+          <!--                        &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
+          <!--                    </div>-->
+          <!-- /.sections__card -->
+        </div>
+        <!-- /.sections__left -->
+        <div class="sections__right">
+          <div class="sections__card">
+            <div class="sections__card-content">
+              <div class="sections__card-wrapper">
+                <div class="sections__card-interactive">
+                  <div class="sections__card-block">
+                    <h3 class="sections__label">Діапазони значень, числа</h3>
+                    <div class="sections__wrapper">
+                      <input type="number" name="range_min_b" step="1" class="sections__input" required />
+                      <input type="number" name="range_max_b" step="1" class="sections__input" required />
+                    </div>
+                    <!-- /.sections__wrapper -->
+                  </div>
+                  <!-- /.sections__card-block -->
+                  <div class="sections__card-block">
+                    <h3 class="sections__label">Вага діапазону, число</h3>
+                    <div class="sections__wrapper">
+                      <input type="number" name="coef_b" step="0.01" class="sections__input" required />
+                    </div>
+                    <!-- /.sections__wrapper -->
+                  </div>
+                  <!-- /.sections__card-block -->
+                </div>
+              </div>
+              <!--  -->
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+        </div>
+        <!-- /.sections__right -->
+      </div>
+      <!-- /.sections__divided -->
+    </section>
+    <section class="sections__item">
+      <h2 class="sections__item-title">Розділ С: проєктні задачі</h2>
+      <span class="sections__item-desc"> ** – загальна кіл-ть % не повинна перевищувати значення 100 у розділі. </span>
+      <div class="sections__divided">
+        <div class="sections__left">
+          <div class="sections__card">
+            <div class="sections__card-aside">
+              <span class="sections__card-section">С1</span>
+            </div>
+            <!-- /.sections__card-aside -->
+            <div class="sections__card-content">
+              <label class="sections__label">
+                Ціль
+                <input type="text" name="title1_c" class="sections__input" required />
+              </label>
+              <label class="sections__label">
+                Вага**, %
+                <input type="number" name="weight1_c" step="0.01" class="sections__input" required />
+              </label>
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+          <div class="sections__card">
+            <div class="sections__card-aside">
+              <span class="sections__card-section">С2</span>
+            </div>
+            <!-- /.sections__card-aside -->
+            <div class="sections__card-content">
+              <label class="sections__label">
+                Ціль
+                <input type="text" name="title2_c" class="sections__input" required />
+              </label>
+              <label class="sections__label">
+                Вага**, %
+                <input type="number" name="weight2_c" step="0.01" class="sections__input" required />
+              </label>
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+          <!--                    <div class="sections__card">-->
+          <!--                        <div class="sections__card-aside">-->
+          <!--                            <span class="sections__card-section">С3</span>-->
+          <!--                        </div>-->
+          <!--                        &lt;!&ndash; /.sections__card-aside &ndash;&gt;-->
+          <!--                        <div class="sections__card-content">-->
+          <!--                            <label class="sections__label">-->
+          <!--                                Ціль-->
+          <!--                                <input type="text" name="title3_c" class="sections__input" required/>-->
+          <!--                            </label>-->
+          <!--                            <label class="sections__label">-->
+          <!--                                Вага**, %-->
+          <!--                                <input type="number" name="weight3_c" step="0.01" class="sections__input" required/>-->
+          <!--                            </label>-->
+          <!--                        </div>-->
+          <!--                        &lt;!&ndash; /.sections__card-content &ndash;&gt;-->
+          <!--                    </div>-->
+          <!-- /.sections__card -->
+        </div>
+        <!-- /.sections__left -->
+        <div class="sections__right">
+          <div class="sections__card">
+            <div class="sections__card-content">
+              <div class="sections__card-wrapper">
+                <div class="sections__card-interactive">
+                  <div class="sections__card-block">
+                    <h3 class="sections__label">Діапазони значень, числа</h3>
+                    <div class="sections__wrapper">
+                      <input type="number" name="range_min_c" step="1" class="sections__input" required />
+                      <input type="number" name="range_max_c" step="1" class="sections__input" required />
+                    </div>
+                    <!-- /.sections__wrapper -->
+                  </div>
+                  <!-- /.sections__card-block -->
+                  <div class="sections__card-block">
+                    <h3 class="sections__label">Вага діапазону, число</h3>
+                    <div class="sections__wrapper">
+                      <input type="number" name="coef_c" class="sections__input" required step="0.01" />
+                    </div>
+                    <!-- /.sections__wrapper -->
+                  </div>
+                  <!-- /.sections__card-block -->
+                </div>
+              </div>
+              <!--  -->
+            </div>
+            <!-- /.sections__card-content -->
+          </div>
+          <!-- /.sections__card -->
+        </div>
+        <!-- /.sections__right -->
+      </div>
+      <!-- /.sections__divided -->
+      <div class="link-wrapper">
+        <button type="submit" class="button sections__button button--primary">Зберегти формулу</button>
+      </div>
+    </section>
+  </form>
 </div>
 <!-- /.sections -->
 {%endblock%}

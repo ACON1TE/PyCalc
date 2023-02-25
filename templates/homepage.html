@@ -6,153 +6,153 @@
 
 {%block aside%}
 <aside class="dashboard__aside">
-        <a href="/home" class="logo dashboard__logo">
-          <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype" />
-        </a>
-        <a href="#" class="dashboard__profile">{{company_name}}</a>
-        <nav class="dashboard__nav">
-          <ul class="dashboard__list">
+    <a href="/home" class="logo dashboard__logo">
+        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
+    </a>
+    <a href="#" class="dashboard__profile">{{company_name}}</a>
+    <nav class="dashboard__nav">
+        <ul class="dashboard__list">
             <li class="dashboard__list-item">
-              <a href="/home" class="dashboard__link dashboard__link--active">
-                <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt="" />
-                <span class="dashboard__link-text">Головна</span>
-              </a>
+                <a href="/home" class="dashboard__link dashboard__link--active">
+                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
+                    <span class="dashboard__link-text">Головна</span>
+                </a>
             </li>
             <li class="dashboard__list-item">
-              <a href="/view_positions" class="dashboard__link">
-                <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon" />
-                <span class="dashboard__link-text">Посади</span>
-              </a>
+                <a href="/view_positions" class="dashboard__link">
+                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Посади</span>
+                </a>
             </li>
             <li class="dashboard__list-item">
-              <a href="/view_employees" class="dashboard__link">
-                <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon" />
-                <span class="dashboard__link-text">Працівники</span>
-              </a>
+                <a href="/view_employees" class="dashboard__link">
+                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Працівники</span>
+                </a>
             </li>
             <li class="dashboard__list-item">
-              <a href="/documents" class="dashboard__link">
-                <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon" />
-                <span class="dashboard__link-text">Документи</span>
-              </a>
+                <a href="/documents" class="dashboard__link">
+                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Документи</span>
+                </a>
             </li>
             <li class="dashboard__list-item">
-              <a href="/settings" class="dashboard__link">
-                <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon" />
-                <span class="dashboard__link-text">Налаштування</span>
-              </a>
+                <a href="/settings" class="dashboard__link">
+                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
+                    <span class="dashboard__link-text">Налаштування</span>
+                </a>
             </li>
-          </ul>
-        </nav>
-      </aside>
+        </ul>
+    </nav>
+    <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
+</aside>
 {%endblock%}
 
 {%block content%}
 <div class="homepage dashboard__homepage">
-          <h1 class="homepage__title">Статистика</h1>
-          <div class="homepage__stats">
-            <div class="homepage__stats-item">
-              <h2 class="homepage__stats-title">Створених посад</h2>
-              <span class="homepage__stats-number">{{positions | length}}</span>
-            </div>
-            <div class="homepage__stats-item">
-              <h2 class="homepage__stats-title">Створених формул</h2>
-              <span class="homepage__stats-number">{{functions| length}}</span>
-            </div>
-            <div class="homepage__stats-item">
-              <h2 class="homepage__stats-title">Створених звітів</h2>
-              <span class="homepage__stats-number">{{reports | length}}</span>
-            </div>
-            <div class="homepage__stats-item">
-              <h2 class="homepage__stats-title">Доданих працівників</h2>
-              <span class="homepage__stats-number">{{employees | length}}</span>
-            </div>
-          </div>
-          <!-- /.homepage__stats -->
-          <h2 class="homepage__title">Найчастіші запитання</h2>
-          <div class="homepage__cards">
-            <div class="homepage__item">
-              <div class="homepage__row">
+    <h1 class="homepage__title">Статистика</h1>
+    <div class="homepage__stats">
+        <div class="homepage__stats-item">
+            <h2 class="homepage__stats-title">Створених посад</h2>
+            <span class="homepage__stats-number">{{positions | length}}</span>
+        </div>
+        <div class="homepage__stats-item">
+            <h2 class="homepage__stats-title">Створених формул</h2>
+            <span class="homepage__stats-number">{{functions| length}}</span>
+        </div>
+        <div class="homepage__stats-item">
+            <h2 class="homepage__stats-title">Створених звітів</h2>
+            <span class="homepage__stats-number">{{reports | length}}</span>
+        </div>
+        <div class="homepage__stats-item">
+            <h2 class="homepage__stats-title">Доданих працівників</h2>
+            <span class="homepage__stats-number">{{employees | length}}</span>
+        </div>
+    </div>
+    <!-- /.homepage__stats -->
+    <h2 class="homepage__title">Найчастіші запитання</h2>
+    <div class="homepage__cards">
+        <div class="homepage__item">
+            <div class="homepage__row">
                 <span class="homepage__question">Як додати працівника до системи?</span>
                 <a href="#" class="homepage__switcher">
-                  <span class="homepage__switcher-item"></span>
-                  <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
                 </a>
-              </div>
-              <!-- /.homepage__row -->
-              <div class="homepage__row homepage__accordion homepage__row--hidden">
-                <p class="homepage__response">Премія за формулою</p>
-              </div>
-              <!-- /.homepage__row -->
             </div>
-            <!-- /.homepage__item -->
-            <div class="homepage__item">
-              <div class="homepage__row">
+            <!-- /.homepage__row -->
+            <div class="homepage__row homepage__accordion homepage__row--hidden">
+                <p class="homepage__response">Премія за формулою</p>
+            </div>
+            <!-- /.homepage__row -->
+        </div>
+        <!-- /.homepage__item -->
+        <div class="homepage__item">
+            <div class="homepage__row">
                 <span class="homepage__question">Як створити посаду й прив’язати до неї математичну формулу? </span>
                 <a href="#" class="homepage__switcher">
-                  <span class="homepage__switcher-item"></span>
-                  <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
                 </a>
-              </div>
-              <!-- /.homepage__row -->
-              <div class="homepage__row homepage__accordion homepage__row--hidden">
-                <p class="homepage__response">Премія за формулою</p>
-              </div>
-              <!-- /.homepage__row -->
             </div>
-            <!-- /.homepage__item -->
-            <div class="homepage__item">
-              <div class="homepage__row">
+            <!-- /.homepage__row -->
+            <div class="homepage__row homepage__accordion homepage__row--hidden">
+                <p class="homepage__response">Премія за формулою</p>
+            </div>
+            <!-- /.homepage__row -->
+        </div>
+        <!-- /.homepage__item -->
+        <div class="homepage__item">
+            <div class="homepage__row">
                 <span class="homepage__question">Як створити математичну формулу? </span>
                 <a href="#" class="homepage__switcher">
-                  <span class="homepage__switcher-item"></span>
-                  <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
                 </a>
-              </div>
-              <!-- /.homepage__row -->
-              <div class="homepage__row homepage__accordion homepage__row--hidden">
-                <p class="homepage__response">Премія за формулою</p>
-              </div>
-              <!-- /.homepage__row -->
             </div>
-            <!-- /.homepage__item -->
-            <div class="homepage__item">
-              <div class="homepage__row">
+            <!-- /.homepage__row -->
+            <div class="homepage__row homepage__accordion homepage__row--hidden">
+                <p class="homepage__response">Премія за формулою</p>
+            </div>
+            <!-- /.homepage__row -->
+        </div>
+        <!-- /.homepage__item -->
+        <div class="homepage__item">
+            <div class="homepage__row">
                 <span class="homepage__question">Як експортувати звіт за посадою?</span>
                 <a href="#" class="homepage__switcher">
-                  <span class="homepage__switcher-item"></span>
-                  <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
                 </a>
-              </div>
-              <!-- /.homepage__row -->
-              <div class="homepage__row homepage__accordion homepage__row--hidden">
-                <p class="homepage__response">Премія за формулою</p>
-              </div>
-              <!-- /.homepage__row -->
             </div>
-            <!-- /.homepage__item -->
-            <div class="homepage__item">
-              <div class="homepage__row">
+            <!-- /.homepage__row -->
+            <div class="homepage__row homepage__accordion homepage__row--hidden">
+                <p class="homepage__response">Премія за формулою</p>
+            </div>
+            <!-- /.homepage__row -->
+        </div>
+        <!-- /.homepage__item -->
+        <div class="homepage__item">
+            <div class="homepage__row">
                 <span class="homepage__question">Де можна перевірити раніше задані значення математичної формули?</span>
                 <a href="#" class="homepage__switcher">
-                  <span class="homepage__switcher-item"></span>
-                  <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
+                    <span class="homepage__switcher-item"></span>
                 </a>
-              </div>
-              <!-- /.homepage__row -->
-              <div class="homepage__row homepage__accordion homepage__row--hidden">
-                <p class="homepage__response">Премія за формулою</p>
-              </div>
-              <!-- /.homepage__row -->
             </div>
-            <!-- /.homepage__item -->
-          </div>
-          <!-- /.homepage__cards -->
+            <!-- /.homepage__row -->
+            <div class="homepage__row homepage__accordion homepage__row--hidden">
+                <p class="homepage__response">Премія за формулою</p>
+            </div>
+            <!-- /.homepage__row -->
         </div>
+        <!-- /.homepage__item -->
+    </div>
+    <!-- /.homepage__cards -->
+</div>
 {%endblock%}
 
 {%block scripts%}
 <script src="../static/js/preloader.js" type="text/javascript"></script>
 <script src="../static/js/dashboard/homepage.js" type="text/javascript"></script>
 {%endblock%}
-

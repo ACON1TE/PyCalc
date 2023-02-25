@@ -6,64 +6,65 @@
 
 {%block aside%}
 <aside class="dashboard__aside">
-    <a href="/home" class="logo dashboard__logo">
-        <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype"/>
-    </a>
-    <a href="#" class="dashboard__profile">{{company_name}}</a>
-    <nav class="dashboard__nav">
-        <ul class="dashboard__list">
-            <li class="dashboard__list-item">
-                <a href="/home" class="dashboard__link">
-                    <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt=""/>
-                    <span class="dashboard__link-text">Головна</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_positions" class="dashboard__link">
-                    <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Посади</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/view_employees" class="dashboard__link">
-                    <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Працівники</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/documents" class="dashboard__link">
-                    <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Документи</span>
-                </a>
-            </li>
-            <li class="dashboard__list-item">
-                <a href="/settings" class="dashboard__link dashboard__link--active">
-                    <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon"/>
-                    <span class="dashboard__link-text">Налаштування</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+  <a href="/home" class="logo dashboard__logo">
+    <img src="../static/images/icons/logotypeSecondary.svg" alt="Premium Calculator Logotype" />
+  </a>
+  <a href="#" class="dashboard__profile">{{company_name}}</a>
+  <nav class="dashboard__nav">
+    <ul class="dashboard__list">
+      <li class="dashboard__list-item">
+        <a href="/home" class="dashboard__link">
+          <img class="dashboard__icon" src="../static/images/icons/homeIcon.svg" alt="" />
+          <span class="dashboard__link-text">Головна</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_positions" class="dashboard__link">
+          <img src="../static/images/icons/positionsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Посади</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/view_employees" class="dashboard__link">
+          <img src="../static/images/icons/employeesIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Працівники</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/documents" class="dashboard__link">
+          <img src="../static/images/icons/documentsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Документи</span>
+        </a>
+      </li>
+      <li class="dashboard__list-item">
+        <a href="/settings" class="dashboard__link dashboard__link--active">
+          <img src="../static/images/icons/settingsIcon.svg" alt="" class="dashboard__icon" />
+          <span class="dashboard__link-text">Налаштування</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
 </aside>
 {%endblock%}
 
 {%block content%}
 <div class="settings dashboard__settings">
-    <h1 class="settings__title">Налаштування</h1>
-    <form action="/view_coefficients" method="POST" class="settings__form">
-        <h2 class="settings__form-title">Система винагороджування</h2>
-        <select name="function_id" id="original-select" class="select settings__select">
-            <option value="-1">Оберіть формулу</option>
-            {%for function in functions%}
-                <option value="{{function[0]}}">{{function[1]}}</option>
-            {%endfor%}
-        </select>
-        <button class="button settings__form-button button--primary" type="submit">Перевірити формулу</button>
-    </form>
-    <div class="settings__wrapper">
-        <a href="/section_abc" class="button settings__button button--primary">Створити нову формулу</a>
-    </div>
-    <!-- /.settings__wrapper -->
+  <h1 class="settings__title">Налаштування</h1>
+  <form action="/view_coefficients" method="POST" class="settings__form">
+    <h2 class="settings__form-title">Система винагороджування</h2>
+    <select name="function_id" id="original-select" class="select settings__select">
+      <option value="-1">Оберіть формулу</option>
+      {%for function in functions%}
+      <option value="{{function[0]}}">{{function[1]}}</option>
+      {%endfor%}
+    </select>
+    <button class="button settings__form-button button--primary" type="submit">Переглянути мотиваційний лист</button>
+  </form>
+  <div class="settings__wrapper">
+    <a href="/section_abc" class="button settings__button button--primary">Створити новий мотиваційний лист</a>
+  </div>
+  <!-- /.settings__wrapper -->
 </div>
 <!-- /.settings -->
 {%endblock%}

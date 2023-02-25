@@ -5,6 +5,7 @@
 """
 
 from modules.db_tools import *
+from modules.fill_db import *
 from werkzeug.utils import redirect
 from flask import Flask, request, session, render_template, send_file
 
@@ -12,7 +13,7 @@ app = Flask(__name__)
 
 app.config.update(
     # SECRET_KEY = 'ахуенно секретный ключ',
-    SECRET_KEY='cookies3',
+    SECRET_KEY='cookies4',
 )
 
 LOGIN_ALERT: str = "Вхід в особистий кабінет"
@@ -35,7 +36,9 @@ def auth():
         if answer:
             session['company_id'] = answer[0]
             if 'route' in session:
-                return redirect(session['route'])
+                route = session['route']
+                del session['route']
+                return redirect(route)
             else:
                 return redirect('/home')
         else:
@@ -48,10 +51,14 @@ def auth():
 # калитка
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template('homepage.html', company_name=get_company_name_by_id(session['company_id']),
-                           positions=get_all_positions(session['company_id']), functions=get_data_function(),
-                           employees=get_all_employees(session['company_id']),
-                           reports=get_all_reports(session['company_id']))
+    if 'company_id' in session:
+        return render_template('homepage.html', company_name=get_company_name_by_id(session['company_id']),
+                               positions=get_all_positions(session['company_id']), functions=get_data_function(),
+                               employees=get_all_employees(session['company_id']),
+                               reports=get_all_reports(session['company_id']))
+    else:
+        session['route'] = '/home'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 # страница для ввода данных о компании
@@ -79,14 +86,18 @@ def company_add():
 # ТРЕБУЕТ ТЕСТОВ но теоретически все заебись
 @app.route('/add_positions', methods=['POST'])
 def positions_add():
-    if request.method == 'POST':
-        position_name = request.form['position_name']
-        salary = float(request.form['salary'])
-        function_id = int(request.form['functions_id'])
-        if add_position(position_name, salary, function_id, session['company_id']):
-            return redirect('/view_positions')
-        else:
-            return redirect('/view_positions')
+    if 'company_id' in session:
+        if request.method == 'POST':
+            position_name = request.form['position_name']
+            salary = float(request.form['salary'])
+            function_id = int(request.form['functions_id'])
+            if add_position(position_name, salary, function_id, session['company_id']):
+                return redirect('/view_positions')
+            else:
+                return redirect('/view_positions')
+    else:
+        session['route'] = '/add_positions'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 def get_data_function():
@@ -148,7 +159,7 @@ def view_coefficients():
             else:
                 return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']))
     else:
-        session['route'] = '/section_abc'
+        session['route'] = '/view_coefficients'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
@@ -167,8 +178,12 @@ def view_positions():
 
 @app.route('/view_employees', methods=['GET'])
 def view_employee():
-    return render_template('view_employees.html', employees=get_all_employees(session['company_id']),
-                           company_name=get_company_name_by_id(session['company_id']))
+    if 'company_id' in session:
+        return render_template('view_employees.html', employees=get_all_employees(session['company_id']),
+                               company_name=get_company_name_by_id(session['company_id']))
+    else:
+        session['route'] = '/view_employees'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 @app.route('/section_abc', methods=['GET', 'POST'])
@@ -203,7 +218,6 @@ def section_abc():
                             break
                     iter_main += 1
                 else:
-                    parse = False
                     break
             #
             # b
@@ -216,7 +230,6 @@ def section_abc():
                     weights_b.append(float(request.form.get(f"weight{line_num}_b")))
                     line_num += 1
                 else:
-                    parse = False
                     break
             range_min_b = int(request.form.get("range_min_b"))
             range_max_b = int(request.form.get("range_max_b"))
@@ -232,7 +245,6 @@ def section_abc():
                     weights_c.append(float(request.form.get(f"weight{line_num}_c")))
                     line_num += 1
                 else:
-                    parsing = False
                     break
             range_min_c = int(request.form.get("range_min_c"))
             range_max_c = int(request.form.get("range_max_c"))
@@ -257,7 +269,8 @@ def section_abc():
             if result:
                 session['coefficient_id'] = result[0]
                 alert = "Запись добавлена! Укажите название функции"
-                return render_template('add_function.html', alert=alert, company_name=get_company_name_by_id(session['company_id']))
+                return render_template('add_function.html', alert=alert,
+                                       company_name=get_company_name_by_id(session['company_id']))
             else:
                 alert = "Ошибка"
                 return render_template('section_abc.html', alert=alert)
@@ -273,7 +286,7 @@ def add_function():
     if 'company_id' in session:
         if request.method == 'POST':
             if 'coefficient_id' in session:
-                res = add_function_sql(session['coefficient_id'], request.form.get("function_name"))
+                res = add_function(session['coefficient_id'], request.form.get("function_name"))
                 if res:
                     del session['coefficient_id']
                     return render_template('settings.html', company_name=get_company_name_by_id(session['company_id']),
@@ -283,7 +296,7 @@ def add_function():
         else:
             return render_template('add_function.html', company_name=get_company_name_by_id(session['company_id']))
     else:
-        session['route'] = '/section_abc'
+        session['route'] = '/add_function'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
@@ -303,10 +316,10 @@ def calculate_report_route():
                           completed_task,
                           budget_plan,
                           budget_spend)
-            report_id = calculate_report(data,
-                                         coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
-                                         session['position_id'],
-                                         session['company_id'])
+            calculate_report(data,
+                             coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
+                             session['position_id'],
+                             session['company_id'])
             del session['position_id']
             return redirect('/download')
             # if type(report_id) == str:
@@ -328,7 +341,7 @@ def calculate_report_route():
                                    company_name=get_company_name_by_id(session['company_id']),
                                    position_name=get_position_name(session['position_id']))
     else:
-        session['route'] = '/section_abc'
+        session['route'] = '/calculate_report'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
@@ -354,7 +367,7 @@ def show_report():
                 message = "Выбранный отчет не найден"
                 return render_template('show_bad_report.html', mes=message)
     else:
-        session['route'] = '/section_abc'
+        session['route'] = '/show_report'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
@@ -385,19 +398,22 @@ def documents():
             return render_template('documents.html', company_name=get_company_name_by_id(session['company_id']),
                                    positions=get_all_positions(session['company_id']))
     else:
-        session['route'] = '/section_abc'
+        session['route'] = '/documents'
         return render_template('index.html', mes=LOGIN_ALERT)
 
 
 @app.route('/download')
 def download_file():
-    return send_file('report.csv')
+    if 'company_id' in session:
+        return send_file('report.csv')
+    else:
+        session['route'] = '/download'
+        return render_template('index.html', mes=LOGIN_ALERT)
 
 
 if __name__ == "__main__":
     drop_all()
     create_db()
     fill_db()
-    test_inserts()
 
     app.run()

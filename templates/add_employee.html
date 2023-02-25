@@ -44,6 +44,7 @@
             </li>
         </ul>
     </nav>
+    <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
 </aside>
 {%endblock%}
 
@@ -65,14 +66,14 @@
             <input type="text" name="phone" class="employees__input" placeholder="+380 12 345 67 89"/>
         </label>
         <span class="employees__label">
-                Посада
-                <select name="position_id" id="original-select" class="select employees__select">
-                    <option value="-1">Оберіть посаду</option>
-                    {%for position in positions%}
-                        <option value="{{position[0]}}">{{position[2]}}</option>
-                    {%endfor%}
-                </select>
-              </span>
+      Посада
+      <select name="position_id" id="original-select" class="select employees__select">
+        <option value="-1">Оберіть посаду</option>
+        {%for position in positions%}
+        <option value="{{position[0]}}">{{position[2]}}</option>
+        {%endfor%}
+      </select>
+    </span>
         <button class="button employees__button button--primary" type="submit">Зберегти</button>
     </form>
 </div>

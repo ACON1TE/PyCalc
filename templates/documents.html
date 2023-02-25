@@ -44,6 +44,7 @@
             </li>
         </ul>
     </nav>
+    <a href="/log_out" class="button dashboard__button button--primary">Вийти з акаунту</a>
 </aside>
 {%endblock%}
 
@@ -57,7 +58,7 @@
         <select name="position_id" id="original-select" class="select documents__select">
             <option value="-1">Оберіть посаду</option>
             {%for position in positions%}
-                <option value="{{position[0]}}">{{position[2]}}</option>
+            <option value="{{position[0]}}">{{position[2]}}</option>
             {%endfor%}
         </select>
         <button class="button documents__button button--primary" type="submit">Завантажити звіт</button>
@@ -70,4 +71,3 @@
 <script src="../static/js/preloader.js"></script>
 <script src="../static/js/dashboard/documents.js"></script>
 {%endblock%}
-
