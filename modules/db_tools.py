@@ -425,7 +425,22 @@ def calculate_report(report: report, coefs: coefs, position_id: int, company_id:
             row.append(bonuses_b_coef_list[i] if i < len(bonuses_b_coef_list) else "")
             row.append(bonuses_c_coef_list[i] if i < len(bonuses_c_coef_list) else "")
             report_writer.writerow(row)
-
+        report_writer.writerow(['', 'Cума преміі розділу А', 'Cума преміі розділу Б ', 'Cума преміі розділу C '])
+        row = list()
+        row.append('')
+        sum_list = [sum(bonuses_a_coef_list) * bonuses_sum_list[0], sum(bonuses_b_coef_list) * bonuses_sum_list[1],
+                    sum(bonuses_c_coef_list) * bonuses_sum_list[2]]
+        row.append(round(sum_list[0], 2))
+        row.append(round(sum_list[1], 2))
+        row.append(round(sum_list[2], 2))
+        report_writer.writerow(row)
+        employee_list = count_employee(position_id)
+        sum_per_person = round(sum(sum_list) / len(employee_list), 2)
+        for name in employee_list:
+            row = list()
+            row.append(name[0])
+            row.append(sum_per_person)
+            report_writer.writerow(row)
     return create_report(report, calc, position_id, company_id)
 
 
@@ -438,6 +453,12 @@ def create_report(report: report, calculated_report: calculated_report, position
     con.commit()
     cur.execute("SELECT orders_id FROM reports ORDER BY orders_id DESC LIMIT 1;")
     return cur.fetchone()[0]
+
+
+def count_employee(position_id: int) -> tuple:
+    cur.execute(f"SELECT name from employee where position_id={position_id}")
+    names = cur.fetchall()
+    return names
 
 
 def get_report(report_id):

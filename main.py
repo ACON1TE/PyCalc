@@ -1,7 +1,7 @@
 """
 скачать PostgreSQL - https://www.postgresql.org/download/windows/
 
-версия бека - 0.6
+версия бека - 2.3
 """
 
 from modules.db_tools import *
@@ -12,8 +12,7 @@ from flask import Flask, request, session, render_template, send_file
 app = Flask(__name__)
 
 app.config.update(
-    # SECRET_KEY = 'ахуенно секретный ключ',
-    SECRET_KEY='cookies4',
+    SECRET_KEY='cookies5',
 )
 
 LOGIN_ALERT: str = "Вхід в особистий кабінет"
@@ -321,7 +320,7 @@ def calculate_report_route():
                              coefs(get_coef(get_function_id_by_position_id(session["position_id"]))),
                              session['position_id'],
                              session['company_id'])
-            del session['position_id']
+            # del session['position_id']
             return redirect('/download')
             # if type(report_id) == str:
             #     session['alert'] = report_id
